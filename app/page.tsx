@@ -1,8 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { RealtimeProvider } from '@/components/dashboard/realtime-provider'
-import { RoomGrid } from '@/components/dashboard/room-grid'
-import { WeatherPanel } from '@/components/dashboard/weather-panel'
-import { DarkModeToggle } from '@/components/dashboard/dark-mode-toggle'
+import { DashboardClient } from '@/components/dashboard/dashboard-client'
 import type { LatestSensorReading, WeatherObservation, SensorConfig } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
@@ -33,37 +30,10 @@ export default async function Home() {
     : null) as WeatherObservation | null
 
   return (
-    <div className="min-h-screen">
-      {/* Header */}
-      <header className="sticky top-0 z-10 border-b border-border/40 bg-background/80 backdrop-blur-sm">
-        <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
-          <h1 className="text-sm font-medium tracking-tight">
-            Home IoT Monitor
-          </h1>
-          <DarkModeToggle />
-        </div>
-      </header>
-
-      {/* Dashboard content */}
-      <main className="max-w-7xl mx-auto p-4">
-        <RealtimeProvider
-          initialReadings={initialReadings}
-          initialWeather={initialWeather}
-          sensorConfig={configs}
-        >
-          {({ readings, weather, sensorConfig: liveConfig }) => (
-            <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
-              {/* Room cards -- main area */}
-              <div className="flex-1 min-w-0">
-                <RoomGrid readings={readings} sensorConfig={liveConfig} />
-              </div>
-
-              {/* Weather panel -- side panel on desktop, stacked on mobile */}
-              <WeatherPanel weather={weather} />
-            </div>
-          )}
-        </RealtimeProvider>
-      </main>
-    </div>
+    <DashboardClient
+      initialReadings={initialReadings}
+      initialWeather={initialWeather}
+      sensorConfig={configs}
+    />
   )
 }

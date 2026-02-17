@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -7,10 +8,13 @@ import {
   Baby,
   Sofa,
   Home,
+  Monitor,
+  TreePine,
   AlertTriangle,
   BatteryLow,
   Droplets,
   Gauge,
+  Pencil,
 } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { dewPoint, absoluteHumidity, classifyComfort, sensorPressureToHpa } from '@/lib/comfort'
@@ -22,13 +26,26 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   bedroom: Bed,
   "kid's room": Baby,
   'living room': Sofa,
+  office: Monitor,
+  outdoors: TreePine,
+}
+
+/** Available room icons for the icon selector */
+export const AVAILABLE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  Bed,
+  Baby,
+  Sofa,
+  Monitor,
+  TreePine,
+  Home,
 }
 
 interface RoomCardProps {
   reading: LatestSensorReading
+  onEdit?: () => void
 }
 
-export function RoomCard({ reading }: RoomCardProps) {
+export function RoomCard({ reading, onEdit }: RoomCardProps) {
   const now = useNow()
   const stale = isSensorStale(reading.measured_at, now)
   const lowBattery =
@@ -45,29 +62,55 @@ export function RoomCard({ reading }: RoomCardProps) {
   const comfort = rh !== null ? classifyComfort(rh) : null
   const colors = comfort ? COMFORT_COLORS[comfort.class] : null
 
-  // Room icon
-  const roomKey = reading.room_name?.toLowerCase() ?? 'default'
-  const RoomIcon = ICON_MAP[roomKey] ?? Home
+  // Room icon: check localStorage for custom icon, fall back to room_name mapping
+  const [RoomIcon, setRoomIcon] = useState<React.ComponentType<{ className?: string }>>(Home)
+
+  useEffect(() => {
+    try {
+      const storedIcon = localStorage.getItem('room-icon-' + reading.mac_address)
+      if (storedIcon && AVAILABLE_ICONS[storedIcon]) {
+        setRoomIcon(() => AVAILABLE_ICONS[storedIcon])
+        return
+      }
+    } catch {
+      // Ignore
+    }
+    // Fall back to room name mapping
+    const roomKey = reading.room_name?.toLowerCase() ?? 'default'
+    setRoomIcon(() => ICON_MAP[roomKey] ?? Home)
+  }, [reading.mac_address, reading.room_name])
 
   // Pressure in hPa
   const pressureHpa = pressure !== null ? sensorPressureToHpa(pressure) : null
 
   return (
     <Card
-      className={`relative transition-all ${
+      className={`group relative transition-all ${
         stale ? 'opacity-50' : ''
       } ${colors ? colors.tint : ''}`}
     >
       <CardContent className="p-4 space-y-3">
-        {/* Header: room name + icon */}
+        {/* Header: room name + icon + edit button */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <RoomIcon className="h-4 w-4 text-muted-foreground" />
+          <div className="flex items-center gap-2 min-w-0">
+            <RoomIcon className="h-4 w-4 text-muted-foreground shrink-0" />
             <span className="text-sm font-medium truncate">
               {reading.display_name ?? reading.room_name ?? reading.mac_address}
             </span>
           </div>
           <div className="flex items-center gap-1">
+            {onEdit && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onEdit()
+                }}
+                className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-accent"
+                aria-label="Edit room"
+              >
+                <Pencil className="h-3 w-3 text-muted-foreground" />
+              </button>
+            )}
             {stale && (
               <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />
             )}
