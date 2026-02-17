@@ -43,11 +43,11 @@ Plans:
   3. Each sensor shows how recently it was updated, with a visual warning when data is stale, and a battery level indicator
   4. User can view dew point, absolute humidity, and comfort classification (dry/comfortable/humid/very humid) per room
   5. Dashboard works well on phone screens and supports dark mode toggle
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 02-01: Next.js project setup, room cards with live indoor and outdoor readings
-- [ ] 02-02: Computed metrics, dark mode, and mobile polish
+- [ ] 02-01-PLAN.md -- Next.js project scaffold, Supabase clients, database migration (Realtime + views + RLS), utility functions, and full dashboard with room cards, weather panel, Realtime subscriptions, and responsive layout
+- [ ] 02-02-PLAN.md -- Sortable card grid with drag-to-reorder, sort controls, room name/icon editing, mobile collapsible weather, and dark mode toggle
 
 ### Phase 3: History and Health
 **Goal**: User can explore how conditions have changed over time with trend charts and verify that all sensors are operating correctly through a dedicated health view
