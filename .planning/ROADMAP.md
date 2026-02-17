@@ -27,11 +27,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. FMI weather data for Helsinki-Vantaa airport is automatically fetched every 10 minutes and stored, with no manual intervention
   3. Invalid or duplicate sensor readings are rejected by the edge function without corrupting stored data
   4. Database storage usage is queryable and the Supabase project stays active indefinitely (no 7-day pause)
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 01-01: Supabase schema and Ruuvi ingestion edge function
-- [ ] 01-02: FMI weather polling and infrastructure reliability
+- [ ] 01-01-PLAN.md -- Database schema (all tables, partitions, functions) and Ruuvi sensor ingestion edge function
+- [ ] 01-02-PLAN.md -- FMI weather polling edge function, pg_cron scheduled jobs, and infrastructure reliability
 
 ### Phase 2: Live Dashboard
 **Goal**: User opens a URL on any device and sees current temperature, humidity, and pressure for every room plus outdoor weather and comfort indicators -- the primary value of the entire project
@@ -71,6 +71,6 @@ Phases execute in numeric order: 1 -> 2 -> 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Data Pipeline | 0/2 | Not started | - |
+| 1. Data Pipeline | 0/2 | Planned | - |
 | 2. Live Dashboard | 0/2 | Not started | - |
 | 3. History and Health | 0/2 | Not started | - |
