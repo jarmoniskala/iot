@@ -12,7 +12,7 @@ Three-phase delivery from data pipeline to full dashboard. Phase 1 gets real sen
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Data Pipeline** - Supabase schema, Ruuvi ingestion edge function, FMI weather polling, and infrastructure reliability
+- [x] **Phase 1: Data Pipeline** - Supabase schema, Ruuvi ingestion edge function, FMI weather polling, and infrastructure reliability (completed 2026-02-17)
 - [ ] **Phase 2: Live Dashboard** - Real-time room readings, outdoor weather, computed comfort metrics, and mobile-responsive UI
 - [ ] **Phase 3: History and Health** - Historical trend charts with time range selection, system health diagnostics, and data gap visualization
 
@@ -27,7 +27,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. FMI weather data for Helsinki-Vantaa airport is automatically fetched every 10 minutes and stored, with no manual intervention
   3. Invalid or duplicate sensor readings are rejected by the edge function without corrupting stored data
   4. Database storage usage is queryable and the Supabase project stays active indefinitely (no 7-day pause)
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 
 Plans:
 - [ ] 01-01-PLAN.md -- Database schema (all tables, partitions, functions) and Ruuvi sensor ingestion edge function
@@ -71,6 +71,6 @@ Phases execute in numeric order: 1 -> 2 -> 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Data Pipeline | 0/2 | Planned | - |
+| 1. Data Pipeline | 0/2 | Complete    | 2026-02-17 |
 | 2. Live Dashboard | 0/2 | Not started | - |
 | 3. History and Health | 0/2 | Not started | - |
