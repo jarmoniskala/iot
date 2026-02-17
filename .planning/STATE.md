@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-17)
 ## Current Position
 
 Phase: 2 of 3 (Live Dashboard)
-Plan: 1 of 2 in current phase
-Status: Executing Phase 02
-Last activity: 2026-02-17 -- Completed 02-01 (Live Dashboard Core)
+Plan: 2 of 2 in current phase (COMPLETE)
+Status: Phase 02 Complete
+Last activity: 2026-02-17 -- Completed 02-02 (Dashboard Interactivity)
 
-Progress: [█████░░░░░] 50%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
+- Total plans completed: 4
 - Average duration: 5min
-- Total execution time: 0.23 hours
+- Total execution time: 0.30 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-data-pipeline | 2 | 6min | 3min |
-| 02-live-dashboard | 1 | 8min | 8min |
+| 02-live-dashboard | 2 | 12min | 6min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (3min), 01-02 (3min), 02-01 (8min)
+- Last 5 plans: 01-01 (3min), 01-02 (3min), 02-01 (8min), 02-02 (4min)
 - Trend: stable
 
 *Updated after each plan completion*
@@ -70,6 +70,12 @@ Recent decisions affecting current work:
 - [02-01]: Pressure conversion at display time via sensorPressureToHpa() (Pa / 100)
 - [02-01]: RealtimeProvider uses render props pattern for live data propagation
 - [02-01]: Mobile weather panel collapsed by default
+- [02-02]: DashboardClient wrapper extracts interactive state from server component page.tsx
+- [02-02]: Custom card order stored as mac_address array in localStorage under 'card-order' key
+- [02-02]: Room icon stored in localStorage per mac_address, not in database
+- [02-02]: PointerSensor with 8px activation distance prevents accidental drags
+- [02-02]: Sort controls use DropdownMenuRadioGroup for exclusive selection
+- [02-02]: Edit button uses opacity-0 group-hover:opacity-100 pattern for subtlety
 
 ### Pending Todos
 
@@ -84,5 +90,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-17
-Stopped at: Completed 02-01-PLAN.md
-Resume file: .planning/phases/02-live-dashboard/02-01-SUMMARY.md
+Stopped at: Completed 02-02-PLAN.md (Phase 02 complete)
+Resume file: .planning/phases/02-live-dashboard/02-02-SUMMARY.md
