@@ -1,0 +1,76 @@
+# Roadmap: Home IoT Monitor
+
+## Overview
+
+Three-phase delivery from data pipeline to full dashboard. Phase 1 gets real sensor data flowing into Supabase and FMI weather polling running -- nothing else matters until the database has data. Phase 2 builds the live dashboard that displays current readings per room with outdoor weather context and computed comfort metrics. Phase 3 adds historical trend charts, system health monitoring, and data gap visualization. Each phase delivers a complete, verifiable capability.
+
+## Phases
+
+**Phase Numbering:**
+- Integer phases (1, 2, 3): Planned milestone work
+- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
+
+Decimal phases appear between their surrounding integers in numeric order.
+
+- [ ] **Phase 1: Data Pipeline** - Supabase schema, Ruuvi ingestion edge function, FMI weather polling, and infrastructure reliability
+- [ ] **Phase 2: Live Dashboard** - Real-time room readings, outdoor weather, computed comfort metrics, and mobile-responsive UI
+- [ ] **Phase 3: History and Health** - Historical trend charts with time range selection, system health diagnostics, and data gap visualization
+
+## Phase Details
+
+### Phase 1: Data Pipeline
+**Goal**: Sensor data flows reliably from RuuviTags through the Android app into Supabase, and FMI weather data is polled automatically every 10 minutes -- the database accumulates data 24/7
+**Depends on**: Nothing (first phase)
+**Requirements**: PIPE-01, PIPE-02, PIPE-03, PIPE-04, PIPE-05, PIPE-06
+**Success Criteria** (what must be TRUE):
+  1. Ruuvi Station Android app successfully POSTs sensor readings to the Supabase edge function and data appears in the database within seconds
+  2. FMI weather data for Helsinki-Vantaa airport is automatically fetched every 10 minutes and stored, with no manual intervention
+  3. Invalid or duplicate sensor readings are rejected by the edge function without corrupting stored data
+  4. Database storage usage is queryable and the Supabase project stays active indefinitely (no 7-day pause)
+**Plans**: TBD
+
+Plans:
+- [ ] 01-01: Supabase schema and Ruuvi ingestion edge function
+- [ ] 01-02: FMI weather polling and infrastructure reliability
+
+### Phase 2: Live Dashboard
+**Goal**: User opens a URL on any device and sees current temperature, humidity, and pressure for every room plus outdoor weather and comfort indicators -- the primary value of the entire project
+**Depends on**: Phase 1
+**Requirements**: LIVE-01, LIVE-02, LIVE-03, LIVE-04, LIVE-05, LIVE-06, LIVE-07, COMP-01, COMP-02, COMP-03
+**Success Criteria** (what must be TRUE):
+  1. User can see current temperature, humidity, and pressure for bedroom, kid's room, and living room on a single page
+  2. User can see current outdoor weather from FMI (temperature, humidity, wind, pressure, precipitation, cloud cover) alongside indoor readings
+  3. Each sensor shows how recently it was updated, with a visual warning when data is stale, and a battery level indicator
+  4. User can view dew point, absolute humidity, and comfort classification (dry/comfortable/humid/very humid) per room
+  5. Dashboard works well on phone screens and supports dark mode toggle
+**Plans**: TBD
+
+Plans:
+- [ ] 02-01: Next.js project setup, room cards with live indoor and outdoor readings
+- [ ] 02-02: Computed metrics, dark mode, and mobile polish
+
+### Phase 3: History and Health
+**Goal**: User can explore how conditions have changed over time with trend charts and verify that all sensors are operating correctly through a dedicated health view
+**Depends on**: Phase 2
+**Requirements**: HIST-01, HIST-02, HIST-03, HIST-04, HIST-05, HLTH-01, HLTH-02, HLTH-03, HLTH-04
+**Success Criteria** (what must be TRUE):
+  1. User can view historical line charts for temperature, humidity, and pressure per room over selectable time ranges (24h, 7d, 30d, custom)
+  2. User can overlay multiple rooms on the same chart and see daily/weekly summary stats (min, max, average)
+  3. Charts visually indicate where data gaps exist (sensor offline or phone away)
+  4. User can view a dedicated system health page showing battery voltage trends, signal strength, movement counter, and last-seen timestamps per sensor
+**Plans**: TBD
+
+Plans:
+- [ ] 03-01: Historical trend charts with time range selection and room comparison
+- [ ] 03-02: System health view and data gap visualization
+
+## Progress
+
+**Execution Order:**
+Phases execute in numeric order: 1 -> 2 -> 3
+
+| Phase | Plans Complete | Status | Completed |
+|-------|----------------|--------|-----------|
+| 1. Data Pipeline | 0/2 | Not started | - |
+| 2. Live Dashboard | 0/2 | Not started | - |
+| 3. History and Health | 0/2 | Not started | - |
