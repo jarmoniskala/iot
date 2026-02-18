@@ -2,7 +2,7 @@
  * Staleness detection for sensors and weather data.
  *
  * Staleness = 3 missed update cycles (per project decision):
- * - Sensors: 3 * 60s = 180s (3 minutes)
+ * - Sensors: 3 * 5min = 15 minutes (Ruuvi Station 5min scan interval)
  * - Weather: 3 * 10min = 30 minutes
  */
 
@@ -14,7 +14,7 @@ import { STALE_SENSOR_THRESHOLD_MS, STALE_WEATHER_THRESHOLD_MS } from './constan
 /**
  * Determine if a sensor reading is stale.
  *
- * Stale if the reading is older than 3 minutes (3 missed 60s update cycles).
+ * Stale if the reading is older than 15 minutes (3 missed 5min scan cycles).
  */
 export function isSensorStale(
   measuredAt: Date | string,

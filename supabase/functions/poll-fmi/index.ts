@@ -134,9 +134,18 @@ function extractObservations(parsed: unknown): ParsedObservation[] {
     );
   }
 
+  // The coverage data is nested under result.MultiPointCoverage
+  const coverage = deepGet(observation, "result.MultiPointCoverage");
+  if (!coverage) {
+    throw new Error(
+      "FMI XML: could not find MultiPointCoverage at " +
+        "result.MultiPointCoverage"
+    );
+  }
+
   // --- Extract timestamps from positions ---
   const positionsRaw = deepGet(
-    observation,
+    coverage,
     "domainSet.SimpleMultiPoint.positions"
   );
   if (typeof positionsRaw !== "string") {
@@ -163,7 +172,7 @@ function extractObservations(parsed: unknown): ParsedObservation[] {
   });
 
   // --- Extract parameter names (for verification) ---
-  const rangeType = deepGet(observation, "rangeSet.DataBlock.rangeType");
+  const rangeType = deepGet(coverage, "rangeType");
   if (rangeType) {
     const dataRecord = deepGet(rangeType, "DataRecord.field");
     if (Array.isArray(dataRecord)) {
@@ -184,7 +193,7 @@ function extractObservations(parsed: unknown): ParsedObservation[] {
 
   // --- Extract values ---
   const valuesRaw = deepGet(
-    observation,
+    coverage,
     "rangeSet.DataBlock.doubleOrNilReasonTupleList"
   );
   if (typeof valuesRaw !== "string") {
@@ -312,6 +321,12 @@ Deno.serve(async (req: Request) => {
     const parser = new XMLParser({
       ignoreAttributes: false,
       removeNSPrefix: true,
+      numberParseOptions: { leadingZeros: false, hex: false },
+      isLeafNode: (_name: string, jpath: string) => {
+        // Force positions and tuple list to stay as strings
+        return jpath.endsWith(".positions") ||
+          jpath.endsWith(".doubleOrNilReasonTupleList");
+      },
     });
     const parsed = parser.parse(xmlText);
 

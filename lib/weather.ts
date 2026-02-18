@@ -103,10 +103,10 @@ export function weatherConditionFromCloudCover(
  */
 export function precipitationLabel(mm: number | null): string {
   if (mm === null || mm === 0) return 'None'
-  if (mm < 0.5) return `${mm.toFixed(1)} mm -- Trace`
-  if (mm < 2.5) return `${mm.toFixed(1)} mm -- Light rain`
-  if (mm < 7.5) return `${mm.toFixed(1)} mm -- Moderate rain`
-  return `${mm.toFixed(1)} mm -- Heavy rain`
+  if (mm < 0.5) return `${mm.toFixed(1)} mm (Trace)`
+  if (mm < 2.5) return `${mm.toFixed(1)} mm (Light rain)`
+  if (mm < 7.5) return `${mm.toFixed(1)} mm (Moderate rain)`
+  return `${mm.toFixed(1)} mm (Heavy rain)`
 }
 
 /**
@@ -127,10 +127,10 @@ export function windDirectionToCompass(degrees: number | null): string {
  */
 export function cloudCoverLabel(oktas: number | null): string {
   if (oktas === null) return '--'
-  if (oktas <= 0) return '0/8 -- Clear'
-  if (oktas <= 2) return `${oktas}/8 -- Few clouds`
-  if (oktas <= 4) return `${oktas}/8 -- Scattered`
-  if (oktas <= 6) return `${oktas}/8 -- Broken`
-  if (oktas <= 7) return `${oktas}/8 -- Mostly cloudy`
-  return '8/8 -- Overcast'
+  if (oktas <= 0) return '0/8 (Clear)'
+  if (oktas <= 2) return `${oktas}/8 (Few clouds)`
+  if (oktas <= 4) return `${oktas}/8 (Scattered)`
+  if (oktas <= 6) return `${oktas}/8 (Broken)`
+  if (oktas <= 7) return `${oktas}/8 (Mostly cloudy)`
+  return '8/8 (Overcast)'
 }

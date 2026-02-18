@@ -10,7 +10,7 @@ import {
   ReferenceLine,
   ResponsiveContainer,
 } from 'recharts'
-import { format } from 'date-fns'
+import { format, formatDistanceToNow } from 'date-fns'
 import { createClient } from '@/lib/supabase/client'
 import { fetchSensorHealthTrend } from '@/lib/queries/health'
 import { BATTERY_LOW_THRESHOLD_V } from '@/lib/constants'
@@ -64,12 +64,24 @@ export function HealthRowDetail({ sensor }: HealthRowDetailProps) {
     time: new Date(row.measured_at).getTime(),
     battery_voltage: row.battery_voltage,
     rssi: row.rssi,
+    movement_counter: row.movement_counter,
   }))
+
+  // Find movement events (where counter changed from previous reading)
+  const movementEvents: { time: number; counter: number }[] = []
+  for (let i = 1; i < trend.length; i++) {
+    const curr = trend[i].movement_counter
+    const prev = trend[i - 1].movement_counter
+    if (curr != null && prev != null && curr !== prev) {
+      movementEvents.push({ time: new Date(trend[i].measured_at).getTime(), counter: curr })
+    }
+  }
 
   const formatTick = (ts: number) => format(new Date(ts), 'MMM d')
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4 p-4">
+    <div className="p-4 space-y-4">
+      <div className="flex flex-col sm:flex-row gap-4">
       {/* Battery voltage trend */}
       <div className="flex-1 min-w-0">
         <h4 className="text-xs font-medium text-muted-foreground mb-2">
@@ -163,6 +175,30 @@ export function HealthRowDetail({ sensor }: HealthRowDetailProps) {
           </AreaChart>
         </ResponsiveContainer>
       </div>
+      </div>
+
+      {/* Movement events */}
+      {movementEvents.length > 0 && (
+        <div>
+          <h4 className="text-xs font-medium text-muted-foreground mb-2">
+            Movement Events (7d) — {movementEvents.length} detected
+          </h4>
+          <div className="flex flex-wrap gap-2">
+            {movementEvents.slice(-20).map((evt, i) => (
+              <span
+                key={i}
+                className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded"
+                title={`Counter: ${evt.counter}`}
+              >
+                {format(new Date(evt.time), 'MMM d HH:mm')} ({formatDistanceToNow(new Date(evt.time), { addSuffix: true })})
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+      {movementEvents.length === 0 && (
+        <p className="text-xs text-muted-foreground">No movement detected in the last 7 days.</p>
+      )}
     </div>
   )
 }

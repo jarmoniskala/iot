@@ -67,7 +67,7 @@ export function WeatherPanel({ weather }: WeatherPanelProps) {
 
   if (!weather) {
     return (
-      <Card className="w-full lg:w-72 xl:w-80 shrink-0">
+      <Card className="w-full lg:w-72 xl:w-80 shrink-0 bg-sky-500/5 dark:bg-sky-500/10 border-sky-500/20">
         <CardContent className="p-4 text-center text-sm text-muted-foreground">
           No weather data yet. Waiting for FMI observation...
         </CardContent>
@@ -102,7 +102,7 @@ export function WeatherPanel({ weather }: WeatherPanelProps) {
           : '--',
       extra:
         weather.wind_gust !== null
-          ? `(gust ${weather.wind_gust.toFixed(1)})`
+          ? `(Gust ${weather.wind_gust.toFixed(1)})`
           : undefined,
     },
     {
@@ -119,12 +119,20 @@ export function WeatherPanel({ weather }: WeatherPanelProps) {
     {
       icon: CloudRain,
       label: 'Precipitation',
-      value: precipitationLabel(weather.precipitation_1h),
+      ...(() => {
+        const full = precipitationLabel(weather.precipitation_1h)
+        const match = full.match(/^(.+?)\s*(\(.+\))$/)
+        return match ? { value: match[1], extra: match[2] } : { value: full }
+      })(),
     },
     {
       icon: Cloud,
       label: 'Cloud cover',
-      value: cloudCoverLabel(weather.cloud_cover),
+      ...(() => {
+        const full = cloudCoverLabel(weather.cloud_cover)
+        const match = full.match(/^(.+?)\s*(\(.+\))$/)
+        return match ? { value: match[1], extra: match[2] } : { value: full }
+      })(),
     },
     {
       icon: Eye,
@@ -206,13 +214,16 @@ export function WeatherPanel({ weather }: WeatherPanelProps) {
   return (
     <>
       {/* Desktop: always-visible side panel */}
-      <Card className="hidden lg:block w-72 xl:w-80 shrink-0">
-        <CardContent className="p-4">{fullContent}</CardContent>
+      <Card className="hidden lg:block w-72 xl:w-80 shrink-0 bg-sky-500/5 dark:bg-sky-500/10 border-sky-500/20">
+        <CardContent className="p-4 relative">
+          {fullContent}
+          <span className="absolute bottom-3 right-3 text-[10px] font-semibold tracking-wider text-sky-400/30 dark:text-sky-300/20">FMI</span>
+        </CardContent>
       </Card>
 
       {/* Mobile: collapsible panel */}
       <Collapsible open={mobileOpen} onOpenChange={setMobileOpen} className="lg:hidden">
-        <Card>
+        <Card className="bg-sky-500/5 dark:bg-sky-500/10 border-sky-500/20">
           <CollapsibleTrigger className="w-full">
             <CardContent className="p-4">
               <div className={`flex items-center justify-between ${stale ? 'opacity-50' : ''}`}>
@@ -239,7 +250,14 @@ export function WeatherPanel({ weather }: WeatherPanelProps) {
             </CardContent>
           </CollapsibleTrigger>
           <CollapsibleContent>
-            <CardContent className="px-4 pb-4 pt-0">{fullContent}</CardContent>
+            <CardContent className="px-4 pb-4 pt-0 relative">
+              {fullContent}
+              <img
+                src="/fmi-logo.svg"
+                alt="FMI"
+                className="absolute bottom-3 right-3 h-4 opacity-30"
+              />
+            </CardContent>
           </CollapsibleContent>
         </Card>
       </Collapsible>

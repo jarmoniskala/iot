@@ -88,9 +88,9 @@ export function RoomCard({ reading, onEdit }: RoomCardProps) {
     <Card
       className={`group relative transition-all ${
         stale ? 'opacity-50' : ''
-      } ${colors ? colors.tint : ''}`}
+      }`}
     >
-      <CardContent className="p-5 space-y-3">
+      <CardContent className="p-4 space-y-3">
         {/* Header: room name + icon + edit button */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">

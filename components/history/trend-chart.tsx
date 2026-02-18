@@ -8,17 +8,15 @@ import {
   YAxis,
   Tooltip,
   ReferenceLine,
-  ReferenceArea,
   ResponsiveContainer,
 } from 'recharts'
 import { format } from 'date-fns'
 import { useChartZoom } from '@/lib/hooks/use-chart-zoom'
 import { ChartTooltip } from './chart-tooltip'
-import { GapTooltip } from './gap-tooltip'
 import { ROOM_COLOR_PALETTE } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
 import { RotateCcw } from 'lucide-react'
-import type { HistoryBucket, GapInterval, Metric, TooltipMode, SensorConfig } from '@/lib/types'
+import type { HistoryBucket, Metric, TooltipMode, SensorConfig } from '@/lib/types'
 
 const METRIC_KEY_MAP: Record<Metric, keyof HistoryBucket> = {
   temperature: 'avg_temperature',
@@ -34,7 +32,6 @@ const METRIC_UNIT: Record<Metric, string> = {
 
 interface TrendChartProps {
   readings: HistoryBucket[]
-  gaps: GapInterval[]
   selectedRooms: string[]
   metric: Metric
   sensorConfig: SensorConfig[]
@@ -49,7 +46,6 @@ interface ChartDataPoint {
 
 export function TrendChart({
   readings,
-  gaps,
   selectedRooms,
   metric,
   sensorConfig,
@@ -128,16 +124,6 @@ export function TrendChart({
   const throttleRef = useRef<number>(0)
   const containerRef = useRef<HTMLDivElement>(null)
   const [isDragging, setIsDragging] = useState(false)
-
-  // Gap tooltip state
-  const [gapTooltip, setGapTooltip] = useState<{
-    visible: boolean
-    x: number
-    y: number
-    gapStart: string
-    gapEnd: string
-    durationMinutes: number
-  }>({ visible: false, x: 0, y: 0, gapStart: '', gapEnd: '', durationMinutes: 0 })
 
   const handleContainerWheel = useCallback(
     (e: React.WheelEvent<HTMLDivElement>) => {
@@ -286,39 +272,6 @@ export function TrendChart({
               }}
             />
 
-            {/* Gap reference areas */}
-            {gaps
-              .filter((g) => selectedRooms.includes(g.mac_address))
-              .map((gap, i) => {
-                const x1 = new Date(gap.gap_start).getTime()
-                const x2 = new Date(gap.gap_end).getTime()
-                return (
-                  <ReferenceArea
-                    key={`gap-${i}`}
-                    x1={x1}
-                    x2={x2}
-                    fillOpacity={0.05}
-                    fill="#9ca3af"
-                    strokeDasharray="4 4"
-                    stroke="#9ca3af"
-                    strokeOpacity={0.3}
-                    onMouseEnter={(e: React.MouseEvent) => {
-                      setGapTooltip({
-                        visible: true,
-                        x: e.clientX - (containerRef.current?.getBoundingClientRect().left ?? 0),
-                        y: e.clientY - (containerRef.current?.getBoundingClientRect().top ?? 0),
-                        gapStart: gap.gap_start,
-                        gapEnd: gap.gap_end,
-                        durationMinutes: gap.duration_minutes,
-                      })
-                    }}
-                    onMouseLeave={() => {
-                      setGapTooltip((prev) => ({ ...prev, visible: false }))
-                    }}
-                  />
-                )
-              })}
-
             {/* Line per selected room */}
             {selectedRooms.map((mac) => {
               const color = roomColors[mac] ?? '#888'
@@ -340,7 +293,6 @@ export function TrendChart({
         </ResponsiveContainer>
       </div>
 
-      <GapTooltip {...gapTooltip} />
     </div>
   )
 }

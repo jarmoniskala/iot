@@ -74,19 +74,22 @@ AS $$
   ORDER BY sc.display_name;
 $$;
 
--- 2. get_sensor_health_trend: raw battery and RSSI readings for mini charts
+-- 2. get_sensor_health_trend: raw battery, RSSI, and movement readings for mini charts
+DROP FUNCTION IF EXISTS get_sensor_health_trend(text, integer);
 CREATE OR REPLACE FUNCTION get_sensor_health_trend(p_mac text, p_hours integer DEFAULT 168)
 RETURNS TABLE (
   measured_at timestamptz,
   battery_voltage double precision,
-  rssi double precision
+  rssi double precision,
+  movement_counter bigint
 )
 LANGUAGE sql
 AS $$
   SELECT
     sr.measured_at,
     sr.battery_voltage::double precision,
-    sr.rssi::double precision
+    sr.rssi::double precision,
+    sr.movement_counter::bigint
   FROM sensor_readings sr
   WHERE sr.mac_address = p_mac
     AND sr.measured_at >= now() - (p_hours || ' hours')::interval

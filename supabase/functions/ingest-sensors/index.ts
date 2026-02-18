@@ -88,26 +88,29 @@ Deno.serve(async (req: Request) => {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
-    // ---- Authentication ----
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return new Response(JSON.stringify({ ok: false, error: "unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-    const token = authHeader.replace("Bearer ", "");
-    if (token !== supabaseAnonKey) {
-      return new Response(JSON.stringify({ ok: false, error: "unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
     // ---- Parse payload ----
     const payload = await req.json();
     const tags = payload.tags;
     const deviceId: string = payload.deviceId || "unknown";
+
+    // ---- Authentication ----
+    // Option 1: deviceId in body matches INGEST_API_KEY env var (Ruuvi Station proxy mode)
+    // Option 2: Bearer token in Authorization header (programmatic clients)
+    const ingestApiKey = Deno.env.get("INGEST_API_KEY");
+
+    const authHeader = req.headers.get("Authorization");
+    const bearerToken = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+
+    const authenticated =
+      (ingestApiKey && deviceId === ingestApiKey) ||
+      (bearerToken && bearerToken === supabaseAnonKey);
+
+    if (!authenticated) {
+      return new Response(JSON.stringify({ ok: false, error: "unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     if (!tags || !Array.isArray(tags)) {
       return new Response(JSON.stringify({ ok: false, error: "missing_tags" }), {

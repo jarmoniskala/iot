@@ -55,17 +55,11 @@ export function HealthTable({ data }: HealthTableProps) {
         id: 'expand',
         header: () => null,
         cell: ({ row }) => (
-          <button
-            onClick={row.getToggleExpandedHandler()}
-            className="p-0.5 rounded hover:bg-accent transition-transform"
-            aria-label={row.getIsExpanded() ? 'Collapse row' : 'Expand row'}
-          >
-            <ChevronRight
-              className={`h-4 w-4 transition-transform duration-200 ${
-                row.getIsExpanded() ? 'rotate-90' : ''
-              }`}
-            />
-          </button>
+          <ChevronRight
+            className={`h-4 w-4 transition-transform duration-200 ${
+              row.getIsExpanded() ? 'rotate-90' : ''
+            }`}
+          />
         ),
         enableSorting: false,
         size: 32,

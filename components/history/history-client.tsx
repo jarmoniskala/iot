@@ -220,7 +220,6 @@ export function HistoryClient({
         <div className="mb-6">
           <TrendChart
             readings={readings}
-            gaps={gaps}
             selectedRooms={selectedRooms}
             metric={metric}
             sensorConfig={sensorConfig}

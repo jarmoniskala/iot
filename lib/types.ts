@@ -165,6 +165,7 @@ export interface SensorHealthTrend {
   measured_at: string
   battery_voltage: number | null
   rssi: number | null
+  movement_counter: number | null
 }
 
 /** Severity level for sensor health status. */
