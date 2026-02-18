@@ -58,11 +58,11 @@ Plans:
   2. User can overlay multiple rooms on the same chart and see daily/weekly summary stats (min, max, average)
   3. Charts visually indicate where data gaps exist (sensor offline or phone away)
   4. User can view a dedicated system health page showing battery voltage trends, signal strength, movement counter, and last-seen timestamps per sensor
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 03-01: Historical trend charts with time range selection and room comparison
-- [ ] 03-02: System health view and data gap visualization
+- [ ] 03-01-PLAN.md -- Database functions (aggregation, gap detection, summary stats), dependencies (recharts, @tanstack/react-table), navigation header, shared hooks, and history page with trend charts, time range picker, room overlay, zoom/pan, gap visualization, and summary stats
+- [ ] 03-02-PLAN.md -- System health page with sortable/expandable sensor table, severity indicators, battery/RSSI trend mini-charts, and dashboard warning icons linking to health page
 
 ## Progress
 
