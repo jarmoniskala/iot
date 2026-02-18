@@ -113,7 +113,7 @@ AS $$
   FROM ordered_readings r
   WHERE r.prev_measured_at IS NOT NULL
     AND extract(epoch FROM (r.measured_at - r.prev_measured_at)) / 60.0 > p_gap_threshold_minutes
-  ORDER BY r.mac_address, r.gap_start;
+  ORDER BY r.mac_address, r.prev_measured_at;
 $$;
 
 -- 3. get_summary_stats: per-sensor summary for a time range
