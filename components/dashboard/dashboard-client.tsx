@@ -4,7 +4,6 @@ import { useState, useCallback } from 'react'
 import { RealtimeProvider } from './realtime-provider'
 import { RoomGrid } from './room-grid'
 import { WeatherPanel } from './weather-panel'
-import { DarkModeToggle } from './dark-mode-toggle'
 import { SortControls } from './sort-controls'
 import { EditRoomDialog } from './edit-room-dialog'
 import type {
@@ -37,22 +36,14 @@ export function DashboardClient({
   }, [])
 
   return (
-    <div className="min-h-screen">
-      {/* Header */}
-      <header className="sticky top-0 z-10 border-b border-border/40 bg-background/80 backdrop-blur-sm">
-        <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
-          <h1 className="text-sm font-medium tracking-tight">
-            Home IoT Monitor
-          </h1>
-          <div className="flex items-center gap-1">
-            <SortControls sortMode={sortMode} onSortChange={setSortMode} />
-            <DarkModeToggle />
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen dashboard-bg">
+      {/* Dashboard toolbar */}
+      <div className="flex items-center justify-end px-6 py-2 max-w-7xl mx-auto">
+        <SortControls sortMode={sortMode} onSortChange={setSortMode} />
+      </div>
 
       {/* Dashboard content */}
-      <main className="max-w-7xl mx-auto p-4">
+      <main className="max-w-7xl mx-auto px-6 pb-6">
         <RealtimeProvider
           initialReadings={initialReadings}
           initialWeather={initialWeather}
@@ -60,7 +51,7 @@ export function DashboardClient({
         >
           {({ readings, weather, sensorConfig: liveConfig }) => (
             <>
-              <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
+              <div className="flex flex-col lg:flex-row gap-4 lg:gap-5">
                 {/* Room cards -- main area */}
                 <div className="flex-1 min-w-0">
                   <RoomGrid

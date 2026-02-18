@@ -16,7 +16,7 @@ export const BATTERY_LOW_THRESHOLD_V = 2.4
  * Staleness thresholds.
  * Staleness = 3 missed update cycles.
  */
-export const STALE_SENSOR_THRESHOLD_MS = 180_000 // 3 minutes (3 * 60s)
+export const STALE_SENSOR_THRESHOLD_MS = 900_000 // 15 minutes (3 * 5min scan interval)
 export const STALE_WEATHER_THRESHOLD_MS = 1_800_000 // 30 minutes (3 * 10min)
 
 /**
@@ -67,3 +67,24 @@ export const COMFORT_COLORS: Record<ComfortClass, {
     border: 'border-red-500/20',
   },
 }
+
+// ── History constants ──────────────────────────────────────────────
+
+/**
+ * Default color palette for room overlays in history charts.
+ * Blue, violet, amber, red, cyan -- up to 5 rooms.
+ */
+export const ROOM_COLOR_PALETTE: string[] = [
+  '#3b82f6', // blue
+  '#8b5cf6', // violet
+  '#f59e0b', // amber
+  '#ef4444', // red
+  '#06b6d4', // cyan
+]
+
+/**
+ * Gap detection threshold in minutes.
+ * 3 missed 5-min scan intervals = 15 minutes.
+ * Matches STALE_SENSOR_THRESHOLD_MS / 60000.
+ */
+export const GAP_THRESHOLD_MINUTES = 15

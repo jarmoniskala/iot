@@ -94,3 +94,53 @@ export interface WeatherCondition {
 
 /** Card sort mode for the room grid. */
 export type SortMode = 'alphabetical' | 'temperature' | 'custom'
+
+// ── History types ──────────────────────────────────────────────────
+
+/** Row from get_sensor_history RPC. Pressure already converted to hPa. */
+export interface HistoryBucket {
+  bucket: string
+  mac_address: string
+  avg_temperature: number | null
+  min_temperature: number | null
+  max_temperature: number | null
+  avg_humidity: number | null
+  min_humidity: number | null
+  max_humidity: number | null
+  avg_pressure_hpa: number | null
+  min_pressure_hpa: number | null
+  max_pressure_hpa: number | null
+  reading_count: number
+}
+
+/** Row from detect_gaps RPC. */
+export interface GapInterval {
+  mac_address: string
+  gap_start: string
+  gap_end: string
+  duration_minutes: number
+}
+
+/** Row from get_summary_stats RPC. */
+export interface SummaryStatsRow {
+  mac_address: string
+  display_name: string
+  min_temp: number | null
+  max_temp: number | null
+  avg_temp: number | null
+  min_humidity: number | null
+  max_humidity: number | null
+  avg_humidity: number | null
+  min_pressure_hpa: number | null
+  max_pressure_hpa: number | null
+  avg_pressure_hpa: number | null
+}
+
+/** Time range preset for history page. */
+export type TimeRangePreset = '24h' | '7d' | '30d' | 'custom'
+
+/** Tooltip mode for history chart. */
+export type TooltipMode = 'shared' | 'single'
+
+/** Metric type for history chart. */
+export type Metric = 'temperature' | 'humidity' | 'pressure'
