@@ -144,3 +144,28 @@ export type TooltipMode = 'shared' | 'single'
 
 /** Metric type for history chart. */
 export type Metric = 'temperature' | 'humidity' | 'pressure'
+
+// ── Health types ──────────────────────────────────────────────────
+
+/** Row from get_sensor_health RPC. */
+export interface SensorHealth {
+  mac_address: string
+  display_name: string
+  latest_battery_voltage: number | null
+  latest_rssi: number | null
+  latest_movement_counter: number | null
+  last_seen: string
+  total_readings: number
+  total_gap_minutes: number
+  uptime_pct: number
+}
+
+/** Row from get_sensor_health_trend RPC. */
+export interface SensorHealthTrend {
+  measured_at: string
+  battery_voltage: number | null
+  rssi: number | null
+}
+
+/** Severity level for sensor health status. */
+export type SeverityLevel = 'healthy' | 'warning' | 'critical'
