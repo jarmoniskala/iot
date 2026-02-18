@@ -2,11 +2,12 @@
 
 import { useMemo, useRef, useCallback, useState } from 'react'
 import {
-  AreaChart,
-  Area,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   Tooltip,
+  ReferenceLine,
   ReferenceArea,
   ResponsiveContainer,
 } from 'recharts'
@@ -75,6 +76,31 @@ export function TrendChart({
 
     return Array.from(bucketMap.values()).sort((a, b) => a.timestamp - b.timestamp)
   }, [readings, metricKey, selectedRooms])
+
+  // Compute Y-axis domain with padding
+  const yDomain = useMemo(() => {
+    let min = Infinity
+    let max = -Infinity
+    for (const point of chartData) {
+      for (const mac of selectedRooms) {
+        const val = point[mac]
+        if (val != null) {
+          if (val < min) min = val
+          if (val > max) max = val
+        }
+      }
+    }
+    if (min === Infinity) return ['auto', 'auto'] as const
+    const range = max - min || 1
+    const padding = range * 0.1
+    return [Math.floor(min - padding), Math.ceil(max + padding)] as const
+  }, [chartData, selectedRooms])
+
+  // Check if zero line is within data range
+  const showZeroLine = useMemo(() => {
+    if (yDomain[0] === 'auto') return false
+    return yDomain[0] <= 0 && yDomain[1] >= 0
+  }, [yDomain])
 
   // Compute initial domain from data
   const initialDomain = useMemo(() => {
@@ -205,26 +231,7 @@ export function TrendChart({
         onMouseLeave={handleContainerMouseUp}
       >
         <ResponsiveContainer width="100%" height={400} className="md:h-[400px] h-[250px]">
-          <AreaChart data={chartData} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
-            <defs>
-              {selectedRooms.map((mac) => {
-                const color = roomColors[mac] ?? '#888'
-                return (
-                  <linearGradient
-                    key={`gradient-${mac}`}
-                    id={`gradient-${mac}`}
-                    x1="0"
-                    y1="0"
-                    x2="0"
-                    y2="1"
-                  >
-                    <stop offset="0%" stopColor={color} stopOpacity={0.3} />
-                    <stop offset="95%" stopColor={color} stopOpacity={0.02} />
-                  </linearGradient>
-                )
-              })}
-            </defs>
-
+          <LineChart data={chartData} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
             <XAxis
               dataKey="timestamp"
               type="number"
@@ -238,6 +245,7 @@ export function TrendChart({
               axisLine={false}
             />
             <YAxis
+              domain={yDomain}
               tick={{ fontSize: 11, fill: '#9ca3af' }}
               stroke="#4b5563"
               strokeOpacity={0.3}
@@ -251,6 +259,16 @@ export function TrendChart({
                 style: { fontSize: 11, fill: '#9ca3af' },
               }}
             />
+
+            {/* Zero reference line */}
+            {showZeroLine && (
+              <ReferenceLine
+                y={0}
+                stroke="#6b7280"
+                strokeWidth={1}
+                strokeDasharray="6 3"
+              />
+            )}
 
             <Tooltip
               content={
@@ -301,25 +319,24 @@ export function TrendChart({
                 )
               })}
 
-            {/* Area per selected room */}
+            {/* Line per selected room */}
             {selectedRooms.map((mac) => {
               const color = roomColors[mac] ?? '#888'
               return (
-                <Area
+                <Line
                   key={mac}
                   type="monotone"
                   dataKey={mac}
                   stroke={color}
-                  fill={`url(#gradient-${mac})`}
                   strokeWidth={2}
                   dot={false}
-                  activeDot={{ r: 4, strokeWidth: 0 }}
+                  activeDot={{ r: 4, strokeWidth: 0, fill: color }}
                   isAnimationActive={false}
                   connectNulls={true}
                 />
               )
             })}
-          </AreaChart>
+          </LineChart>
         </ResponsiveContainer>
       </div>
 

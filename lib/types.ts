@@ -137,7 +137,7 @@ export interface SummaryStatsRow {
 }
 
 /** Time range preset for history page. */
-export type TimeRangePreset = '24h' | '7d' | '30d' | 'custom'
+export type TimeRangePreset = '1h' | '2h' | '3h' | '6h' | '12h' | '24h' | '7d' | '30d' | 'custom'
 
 /** Tooltip mode for history chart. */
 export type TooltipMode = 'shared' | 'single'

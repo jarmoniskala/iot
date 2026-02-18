@@ -15,6 +15,11 @@ import type { TimeRangePreset } from '@/lib/types'
 import type { DateRange } from 'react-day-picker'
 
 const PRESETS: { value: TimeRangePreset; label: string }[] = [
+  { value: '1h', label: '1h' },
+  { value: '2h', label: '2h' },
+  { value: '3h', label: '3h' },
+  { value: '6h', label: '6h' },
+  { value: '12h', label: '12h' },
   { value: '24h', label: '24h' },
   { value: '7d', label: '7d' },
   { value: '30d', label: '30d' },

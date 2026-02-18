@@ -41,6 +41,16 @@ function getDateRange(
   const now = new Date()
 
   switch (preset) {
+    case '1h':
+      return { from: subHours(now, 1), to: now, rangeHours: 1 }
+    case '2h':
+      return { from: subHours(now, 2), to: now, rangeHours: 2 }
+    case '3h':
+      return { from: subHours(now, 3), to: now, rangeHours: 3 }
+    case '6h':
+      return { from: subHours(now, 6), to: now, rangeHours: 6 }
+    case '12h':
+      return { from: subHours(now, 12), to: now, rangeHours: 12 }
     case '24h':
       return { from: subHours(now, 24), to: now, rangeHours: 24 }
     case '7d':
