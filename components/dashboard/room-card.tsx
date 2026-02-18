@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -11,7 +12,7 @@ import {
   Monitor,
   TreePine,
   AlertTriangle,
-  BatteryLow,
+  BatteryWarning,
   Droplets,
   Gauge,
   Pencil,
@@ -89,7 +90,7 @@ export function RoomCard({ reading, onEdit }: RoomCardProps) {
         stale ? 'opacity-50' : ''
       } ${colors ? colors.tint : ''}`}
     >
-      <CardContent className="p-4 space-y-3">
+      <CardContent className="p-5 space-y-3">
         {/* Header: room name + icon + edit button */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">
@@ -111,11 +112,25 @@ export function RoomCard({ reading, onEdit }: RoomCardProps) {
                 <Pencil className="h-3 w-3 text-muted-foreground" />
               </button>
             )}
-            {stale && (
-              <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />
-            )}
             {lowBattery && (
-              <BatteryLow className="h-3.5 w-3.5 text-red-500" />
+              <Link
+                href="/health"
+                title="Low battery — view health"
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center"
+              >
+                <BatteryWarning className="h-4 w-4 text-amber-500 dark:text-amber-400" />
+              </Link>
+            )}
+            {stale && (
+              <Link
+                href="/health"
+                title="Stale data — view health"
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center"
+              >
+                <AlertTriangle className="h-4 w-4 text-red-500 dark:text-red-400 animate-pulse" />
+              </Link>
             )}
           </div>
         </div>
