@@ -231,15 +231,15 @@ export function TrendChart({
               domain={[domain.left, domain.right]}
               scale="time"
               tickFormatter={tickFormatter}
-              tick={{ fontSize: 11 }}
-              stroke="hsl(var(--muted-foreground))"
+              tick={{ fontSize: 11, fill: '#9ca3af' }}
+              stroke="#4b5563"
               strokeOpacity={0.3}
               tickLine={false}
               axisLine={false}
             />
             <YAxis
-              tick={{ fontSize: 11 }}
-              stroke="hsl(var(--muted-foreground))"
+              tick={{ fontSize: 11, fill: '#9ca3af' }}
+              stroke="#4b5563"
               strokeOpacity={0.3}
               tickLine={false}
               axisLine={false}
@@ -248,7 +248,7 @@ export function TrendChart({
                 value: METRIC_UNIT[metric],
                 position: 'insideTopLeft',
                 offset: -5,
-                style: { fontSize: 11, fill: 'hsl(var(--muted-foreground))' },
+                style: { fontSize: 11, fill: '#9ca3af' },
               }}
             />
 
@@ -262,8 +262,8 @@ export function TrendChart({
                 />
               }
               cursor={{
-                stroke: 'hsl(var(--muted-foreground))',
-                strokeOpacity: 0.2,
+                stroke: '#9ca3af',
+                strokeOpacity: 0.3,
                 strokeDasharray: '4 4',
               }}
             />
@@ -280,9 +280,9 @@ export function TrendChart({
                     x1={x1}
                     x2={x2}
                     fillOpacity={0.05}
-                    fill="hsl(var(--muted-foreground))"
+                    fill="#9ca3af"
                     strokeDasharray="4 4"
-                    stroke="hsl(var(--muted-foreground))"
+                    stroke="#9ca3af"
                     strokeOpacity={0.3}
                     onMouseEnter={(e: React.MouseEvent) => {
                       setGapTooltip({
@@ -315,7 +315,7 @@ export function TrendChart({
                   dot={false}
                   activeDot={{ r: 4, strokeWidth: 0 }}
                   isAnimationActive={false}
-                  connectNulls={false}
+                  connectNulls={true}
                 />
               )
             })}
