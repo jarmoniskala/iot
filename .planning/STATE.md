@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-17)
 
 **Core value:** See current and historical temperature, humidity, and pressure across every room at a glance, with outdoor weather context from FMI.
-**Current focus:** Phase 2: Live Dashboard
+**Current focus:** Phase 3: History and Health
 
 ## Current Position
 
-Phase: 2 of 3 (Live Dashboard)
-Plan: 2 of 2 in current phase (COMPLETE)
-Status: Phase 02 Complete
-Last activity: 2026-02-17 -- Completed 02-02 (Dashboard Interactivity)
+Phase: 3 of 3 (History and Health)
+Plan: 1 of 2 in current phase
+Status: Executing Phase 03
+Last activity: 2026-02-18 -- Completed 03-01 (History Trend Charts)
 
-Progress: [████████░░] 80%
+Progress: [████████▓░] 85%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 5
 - Average duration: 5min
-- Total execution time: 0.30 hours
+- Total execution time: 0.42 hours
 
 **By Phase:**
 
@@ -29,9 +29,10 @@ Progress: [████████░░] 80%
 |-------|-------|-------|----------|
 | 01-data-pipeline | 2 | 6min | 3min |
 | 02-live-dashboard | 2 | 12min | 6min |
+| 03-history-and-health | 1 | 7min | 7min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (3min), 01-02 (3min), 02-01 (8min), 02-02 (4min)
+- Last 5 plans: 01-02 (3min), 02-01 (8min), 02-02 (4min), 03-01 (7min)
 - Trend: stable
 
 *Updated after each plan completion*
@@ -76,6 +77,10 @@ Recent decisions affecting current work:
 - [02-02]: PointerSensor with 8px activation distance prevents accidental drags
 - [02-02]: Sort controls use DropdownMenuRadioGroup for exclusive selection
 - [02-02]: Edit button uses opacity-0 group-hover:opacity-100 pattern for subtlety
+- [03-01]: Migration numbered 006 (005 already taken by latest_weather view fix)
+- [03-01]: Dashboard header replaced by global Navigation component; SortControls moved inline
+- [03-01]: usePersistedState hydrates from localStorage in useEffect for SSR safety
+- [03-01]: Pressure Pa/100 conversion in SQL functions (consistent with Phase 2 display-time pattern)
 
 ### Pending Todos
 
@@ -90,5 +95,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-18
-Stopped at: Phase 3 context gathered
-Resume file: .planning/phases/03-history-and-health/03-CONTEXT.md
+Stopped at: Completed 03-01-PLAN.md (History Trend Charts)
+Resume file: .planning/phases/03-history-and-health/03-01-SUMMARY.md
