@@ -69,12 +69,12 @@ export function WeatherHero({ weather }: WeatherHeroProps) {
     <section className="bg-background">
       <div className="max-w-7xl mx-auto px-5 pt-6 pb-5">
         {/* Section heading — never dims */}
-        <div className="flex items-end justify-between mb-5">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-1 sm:gap-0 mb-5">
           <div>
             <h2 className="text-[1.728rem] font-semibold leading-tight tracking-tight text-foreground">Weather</h2>
             <p className="text-[1.44rem] font-light text-muted-foreground mt-1">Data provided by FMI</p>
           </div>
-          <div className="flex items-center gap-2 mb-0.5">
+          <div className="flex items-center gap-2 sm:mb-0.5">
             {stale && <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" strokeWidth={1.5} />}
             <span className="text-[0.833rem] text-muted-foreground/60">
               {stale ? 'Last updated ' : 'Updated '}
@@ -84,7 +84,7 @@ export function WeatherHero({ weather }: WeatherHeroProps) {
         </div>
 
         {/* Primary metric cards (5 columns on lg) */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
           {/* Weather condition card */}
           <div className="bg-card border border-border rounded-lg p-5">
             <div className="flex items-center gap-2">

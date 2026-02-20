@@ -9,7 +9,7 @@ interface HealthClientProps {
 
 export function HealthClient({ initialHealth }: HealthClientProps) {
   return (
-    <div className="max-w-7xl mx-auto px-5 py-8 space-y-5">
+    <div className="max-w-7xl mx-auto px-4 sm:px-5 py-6 sm:py-8 space-y-5">
       <div>
         <h1 className="text-[1.728rem] font-semibold leading-tight tracking-tight">System Health</h1>
         <p className="text-[1.44rem] font-light text-muted-foreground mt-1">

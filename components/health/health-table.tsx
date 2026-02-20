@@ -160,7 +160,7 @@ export function HealthTable({ data }: HealthTableProps) {
   })
 
   return (
-    <div className="rounded-lg border overflow-hidden">
+    <div className="rounded-lg border overflow-x-auto">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

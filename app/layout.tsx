@@ -21,7 +21,7 @@ export default function RootLayout({
       >
         <Providers>
           <Navigation />
-          <div className="pl-[264px]">
+          <div className="pb-16 md:pb-0 md:pl-[264px]">
             {children}
           </div>
         </Providers>
