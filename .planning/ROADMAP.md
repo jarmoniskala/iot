@@ -73,10 +73,10 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. Dashboard displays current database size (MB) and per-table breakdown
   2. Data comes from existing `get_database_size_mb()` / `get_table_sizes()` functions or `ingestion_log` storage entries
-**Plans:** 0 plans
+**Plans:** 1 plan
 
 Plans:
-- (none yet — run `/gsd:plan-phase 4`)
+- [ ] 04-01-PLAN.md -- SECURITY DEFINER migration, storage query layer, and dashboard storage widget with progress bar and per-table breakdown
 
 ## Progress
 
@@ -88,4 +88,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 1. Data Pipeline | 0/2 | Complete    | 2026-02-17 |
 | 2. Live Dashboard | 0/2 | Not started | - |
 | 3. History and Health | 0/2 | Not started | - |
-| 4. Storage Dashboard Widget | 0/0 | Not started | - |
+| 4. Storage Dashboard Widget | 0/1 | Not started | - |
