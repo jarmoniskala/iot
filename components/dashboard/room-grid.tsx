@@ -24,21 +24,23 @@ interface RoomGridProps {
   sensorConfig: SensorConfig[]
   sortMode: SortMode
   onEdit?: (sensor: SensorConfig) => void
+  configVersion?: number
 }
 
 const CARD_ORDER_KEY = 'card-order'
 
-/** Wrapper that makes a RoomCard draggable in custom sort mode */
 function SortableCard({
   id,
   reading,
   config,
   onEdit,
+  configVersion,
 }: {
   id: string
   reading: LatestSensorReading
   config: SensorConfig
   onEdit?: (sensor: SensorConfig) => void
+  configVersion?: number
 }) {
   const {
     attributes,
@@ -58,6 +60,7 @@ function SortableCard({
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       <RoomCard
+        key={`${id}-${configVersion}`}
         reading={reading}
         onEdit={onEdit ? () => onEdit(config) : undefined}
       />
@@ -70,11 +73,11 @@ export function RoomGrid({
   sensorConfig,
   sortMode,
   onEdit,
+  configVersion,
 }: RoomGridProps) {
   const [customOrder, setCustomOrder] = useState<string[]>([])
   const [orderLoaded, setOrderLoaded] = useState(false)
 
-  // Load custom order from localStorage (SSR-safe: only in useEffect)
   useEffect(() => {
     try {
       const stored = localStorage.getItem(CARD_ORDER_KEY)
@@ -87,20 +90,17 @@ export function RoomGrid({
     setOrderLoaded(true)
   }, [])
 
-  // dnd-kit sensors with 8px activation distance to prevent accidental drags
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 8 },
     })
   )
 
-  // Get active sensors that have readings
   const activeSensors = sensorConfig.filter(
     (config) =>
       config.unassigned_at === null && readings.has(config.mac_address)
   )
 
-  // Sort sensors based on current mode
   const getSortedSensors = useCallback((): SensorConfig[] => {
     const sensors = [...activeSensors]
 
@@ -115,22 +115,19 @@ export function RoomGrid({
         return sensors.sort((a, b) => {
           const tempA = readings.get(a.mac_address)?.temperature
           const tempB = readings.get(b.mac_address)?.temperature
-          // Cards with no reading sort to end
           if (tempA === null || tempA === undefined) return 1
           if (tempB === null || tempB === undefined) return -1
-          return tempB - tempA // Descending (hottest first)
+          return tempB - tempA
         })
       }
       case 'custom': {
         if (!orderLoaded || customOrder.length === 0) {
-          // Fall back to alphabetical until custom order is loaded
           return sensors.sort((a, b) =>
             (a.display_name ?? a.room_name ?? '').localeCompare(
               b.display_name ?? b.room_name ?? ''
             )
           )
         }
-        // Sort by custom order, with any unknown MACs at the end
         return sensors.sort((a, b) => {
           const idxA = customOrder.indexOf(a.mac_address)
           const idxB = customOrder.indexOf(b.mac_address)
@@ -146,7 +143,6 @@ export function RoomGrid({
 
   const sortedSensors = getSortedSensors()
 
-  // Handle drag end in custom mode
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event
@@ -179,13 +175,14 @@ export function RoomGrid({
 
   if (activeSensors.length === 0) {
     return (
-      <div className="flex items-center justify-center py-12 text-muted-foreground text-sm">
+      <div className="flex items-center justify-center py-12 text-[0.833rem] text-muted-foreground">
         No sensor data yet. Waiting for first reading from Ruuvi Station...
       </div>
     )
   }
 
-  // Custom mode: wrap in DndContext for drag-and-drop
+  const gridClassName = "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"
+
   if (sortMode === 'custom') {
     return (
       <DndContext
@@ -197,7 +194,7 @@ export function RoomGrid({
           items={sortedSensors.map((s) => s.mac_address)}
           strategy={rectSortingStrategy}
         >
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+          <div className={gridClassName}>
             {sortedSensors.map((config) => {
               const reading = readings.get(config.mac_address)!
               return (
@@ -207,6 +204,7 @@ export function RoomGrid({
                   reading={reading}
                   config={config}
                   onEdit={onEdit}
+                  configVersion={configVersion}
                 />
               )
             })}
@@ -216,14 +214,13 @@ export function RoomGrid({
     )
   }
 
-  // Non-custom modes: plain grid (no drag overhead)
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+    <div className={gridClassName}>
       {sortedSensors.map((config) => {
         const reading = readings.get(config.mac_address)!
         return (
           <RoomCard
-            key={config.mac_address}
+            key={`${config.mac_address}-${configVersion}`}
             reading={reading}
             onEdit={onEdit ? () => onEdit(config) : undefined}
           />

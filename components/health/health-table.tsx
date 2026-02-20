@@ -12,7 +12,7 @@ import {
   type ExpandedState,
 } from '@tanstack/react-table'
 import { useState } from 'react'
-import { ChevronRight, ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
+import { ChevronRight, ArrowUp, ArrowDown, ChevronsUpDown } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import {
   Table,
@@ -56,9 +56,10 @@ export function HealthTable({ data }: HealthTableProps) {
         header: () => null,
         cell: ({ row }) => (
           <ChevronRight
-            className={`h-4 w-4 transition-transform duration-200 ${
+            className={`h-3.5 w-3.5 transition-transform duration-200 text-muted-foreground ${
               row.getIsExpanded() ? 'rotate-90' : ''
             }`}
+            strokeWidth={1.5}
           />
         ),
         enableSorting: false,
@@ -159,7 +160,7 @@ export function HealthTable({ data }: HealthTableProps) {
   })
 
   return (
-    <div className="rounded-md border">
+    <div className="rounded-lg border overflow-hidden">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -185,11 +186,11 @@ export function HealthTable({ data }: HealthTableProps) {
                     {header.column.getCanSort() && (
                       <span className="text-muted-foreground">
                         {header.column.getIsSorted() === 'asc' ? (
-                          <ArrowUp className="h-3 w-3" />
+                          <ArrowUp className="h-3 w-3" strokeWidth={1.5} />
                         ) : header.column.getIsSorted() === 'desc' ? (
-                          <ArrowDown className="h-3 w-3" />
+                          <ArrowDown className="h-3 w-3" strokeWidth={1.5} />
                         ) : (
-                          <ArrowUpDown className="h-3 w-3 opacity-40" />
+                          <ChevronsUpDown className="h-3 w-3 opacity-40" strokeWidth={1.5} />
                         )}
                       </span>
                     )}

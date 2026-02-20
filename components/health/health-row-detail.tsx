@@ -84,7 +84,7 @@ export function HealthRowDetail({ sensor }: HealthRowDetailProps) {
       <div className="flex flex-col sm:flex-row gap-4">
       {/* Battery voltage trend */}
       <div className="flex-1 min-w-0">
-        <h4 className="text-xs font-medium text-muted-foreground mb-2">
+        <h4 className="text-[0.833rem] font-medium uppercase tracking-[0.06em] text-muted-foreground mb-2">
           Battery Voltage (7d)
         </h4>
         <ResponsiveContainer width="100%" height={150}>
@@ -101,15 +101,15 @@ export function HealthRowDetail({ sensor }: HealthRowDetailProps) {
               type="number"
               domain={['dataMin', 'dataMax']}
               tickFormatter={formatTick}
-              tick={{ fontSize: 10 }}
+              tick={{ fontSize: 11, fill: '#657080' }}
               tickLine={false}
               axisLine={false}
             />
             <YAxis
-              tick={{ fontSize: 10 }}
+              tick={{ fontSize: 11, fill: '#657080' }}
               tickLine={false}
               axisLine={false}
-              label={{ value: 'V', position: 'insideLeft', style: { fontSize: 10 } }}
+              label={{ value: 'V', position: 'insideLeft', style: { fontSize: 11 } }}
               domain={['auto', 'auto']}
             />
             <ReferenceLine
@@ -134,7 +134,7 @@ export function HealthRowDetail({ sensor }: HealthRowDetailProps) {
 
       {/* RSSI trend */}
       <div className="flex-1 min-w-0">
-        <h4 className="text-xs font-medium text-muted-foreground mb-2">
+        <h4 className="text-[0.833rem] font-medium uppercase tracking-[0.06em] text-muted-foreground mb-2">
           Signal Strength (7d)
         </h4>
         <ResponsiveContainer width="100%" height={150}>
@@ -151,15 +151,15 @@ export function HealthRowDetail({ sensor }: HealthRowDetailProps) {
               type="number"
               domain={['dataMin', 'dataMax']}
               tickFormatter={formatTick}
-              tick={{ fontSize: 10 }}
+              tick={{ fontSize: 11, fill: '#657080' }}
               tickLine={false}
               axisLine={false}
             />
             <YAxis
-              tick={{ fontSize: 10 }}
+              tick={{ fontSize: 11, fill: '#657080' }}
               tickLine={false}
               axisLine={false}
-              label={{ value: 'dBm', position: 'insideLeft', style: { fontSize: 10 } }}
+              label={{ value: 'dBm', position: 'insideLeft', style: { fontSize: 11 } }}
               domain={['auto', 'auto']}
             />
             <Area
@@ -180,7 +180,7 @@ export function HealthRowDetail({ sensor }: HealthRowDetailProps) {
       {/* Movement events */}
       {movementEvents.length > 0 && (
         <div>
-          <h4 className="text-xs font-medium text-muted-foreground mb-2">
+          <h4 className="text-[0.833rem] font-medium uppercase tracking-[0.06em] text-muted-foreground mb-2">
             Movement Events (7d) — {movementEvents.length} detected
           </h4>
           <div className="flex flex-wrap gap-2">

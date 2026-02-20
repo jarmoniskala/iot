@@ -1,7 +1,6 @@
 'use client'
 
 import { ArrowUpDown, ArrowDownAZ, Thermometer, GripVertical } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,10 +19,10 @@ export function SortControls({ sortMode, onSortChange }: SortControlsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <ArrowUpDown className="h-4 w-4" />
+        <button className="w-8 h-8 flex items-center justify-center rounded-md transition-colors text-foreground/80 hover:bg-accent">
+          <ArrowUpDown className="h-4 w-4" strokeWidth={1.5} />
           <span className="sr-only">Sort rooms</span>
-        </Button>
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuRadioGroup
@@ -31,15 +30,15 @@ export function SortControls({ sortMode, onSortChange }: SortControlsProps) {
           onValueChange={(value) => onSortChange(value as SortMode)}
         >
           <DropdownMenuRadioItem value="alphabetical">
-            <ArrowDownAZ className="h-4 w-4 mr-2" />
+            <ArrowDownAZ className="h-3.5 w-3.5 mr-2" strokeWidth={1.5} />
             Alphabetical
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="temperature">
-            <Thermometer className="h-4 w-4 mr-2" />
+            <Thermometer className="h-3.5 w-3.5 mr-2" strokeWidth={1.5} />
             By Temperature
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="custom">
-            <GripVertical className="h-4 w-4 mr-2" />
+            <GripVertical className="h-3.5 w-3.5 mr-2" strokeWidth={1.5} />
             Custom Order
           </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>

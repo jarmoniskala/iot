@@ -44,11 +44,11 @@ export function ChartTooltip({
   const entries = tooltipMode === 'single' ? payload.slice(0, 1) : payload
 
   return (
-    <div className="rounded-lg border bg-background/95 backdrop-blur-sm px-3 py-2 shadow-md">
-      <p className="text-xs text-muted-foreground mb-1.5">
+    <div className="rounded-md border bg-background/95 backdrop-blur-sm px-2.5 py-1.5 shadow-md">
+      <p className="text-[0.833rem] text-muted-foreground mb-1">
         {format(timestamp, 'MMM d, HH:mm')}
       </p>
-      <div className="space-y-1">
+      <div className="space-y-0.5">
         {entries.map((entry) => {
           if (entry.value == null) return null
           const mac = String(entry.dataKey ?? '')
@@ -56,13 +56,13 @@ export function ChartTooltip({
           const color = roomColors[mac] ?? entry.color ?? '#888'
 
           return (
-            <div key={mac} className="flex items-center gap-2 text-sm">
+            <div key={mac} className="flex items-center gap-1.5 text-xs">
               <span
-                className="h-2 w-2 rounded-full shrink-0"
+                className="h-1.5 w-1.5 rounded-full shrink-0"
                 style={{ backgroundColor: color }}
               />
               <span className="text-muted-foreground">{name}</span>
-              <span className="font-medium ml-auto">
+              <span className="font-medium ml-auto tabular-nums">
                 {typeof entry.value === 'number'
                   ? entry.value.toFixed(1)
                   : entry.value}

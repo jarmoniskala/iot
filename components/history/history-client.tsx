@@ -152,10 +152,10 @@ export function HistoryClient({
 
   return (
     <div className="min-h-screen">
-      <main className="max-w-7xl mx-auto p-6">
+      <main className="max-w-7xl mx-auto px-5 py-8">
         {/* Page header */}
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-lg font-semibold tracking-tight">History</h1>
+          <h1 className="text-[1.728rem] font-semibold leading-tight tracking-tight">History</h1>
           <Button
             variant="ghost"
             size="icon"
@@ -172,9 +172,9 @@ export function HistoryClient({
             }
           >
             {tooltipMode === 'shared' ? (
-              <Crosshair className="h-4 w-4" />
+              <Crosshair className="h-3.5 w-3.5" strokeWidth={1.5} />
             ) : (
-              <MousePointer className="h-4 w-4" />
+              <MousePointer className="h-3.5 w-3.5" strokeWidth={1.5} />
             )}
           </Button>
         </div>
@@ -183,7 +183,7 @@ export function HistoryClient({
         <Tabs
           value={metric}
           onValueChange={(v) => setMetric(v as Metric)}
-          className="mb-4"
+          className="mb-3"
         >
           <TabsList>
             <TabsTrigger value="temperature">Temperature</TabsTrigger>
@@ -193,7 +193,7 @@ export function HistoryClient({
         </Tabs>
 
         {/* Time range picker */}
-        <div className="mb-4">
+        <div className="mb-3">
           <TimeRangePicker
             timeRange={timeRange}
             onTimeRangeChange={handleTimeRangeChange}
@@ -203,7 +203,7 @@ export function HistoryClient({
         </div>
 
         {/* Room selector */}
-        <div className="mb-4">
+        <div className="mb-5">
           <RoomSelector
             sensorConfig={sensorConfig}
             selectedRooms={selectedRooms}
@@ -217,7 +217,7 @@ export function HistoryClient({
         )}
 
         {/* Trend chart */}
-        <div className="mb-6">
+        <div className="mb-5">
           <TrendChart
             readings={readings}
             selectedRooms={selectedRooms}

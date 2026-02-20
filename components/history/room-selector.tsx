@@ -40,7 +40,7 @@ export function RoomSelector({
             variant="ghost"
             size="sm"
             className={cn(
-              'h-8 rounded-full text-xs gap-1.5 transition-all',
+              'h-8 text-xs gap-1.5 transition-all',
               isSelected
                 ? 'border border-border shadow-sm'
                 : 'opacity-50 hover:opacity-75'

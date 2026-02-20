@@ -25,8 +25,13 @@ const FMISID = 100968;
 // the full 12-hour history that FMI returns by default.
 const RECENT_WINDOW_MS = 20 * 60 * 1000;
 
-// FMI fetch timeout -- avoid Edge Function timeout (max ~25s).
+// FMI fetch timeout per attempt.
 const FETCH_TIMEOUT_MS = 8000;
+
+// Retry configuration: 3 attempts, exponential backoff (1s, 2s).
+// Worst case total: 8s + 1s + 8s + 2s + 8s = 27s (well within Edge Function limit).
+const MAX_ATTEMPTS = 3;
+const RETRY_DELAYS_MS = [1000, 2000];
 
 // Map FMI parameter names to weather_observations column names.
 // Order matches the FMI multipointcoverage response for FMISID 100968.
@@ -255,59 +260,58 @@ Deno.serve(async (req: Request) => {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
-    // ---- Fetch FMI data with timeout ----
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+    // ---- Fetch FMI data with retry + timeout ----
+    let fmiResponse: Response | null = null;
+    let lastError: string | null = null;
+    let attempts = 0;
 
-    let fmiResponse: Response;
-    try {
-      fmiResponse = await fetch(FMI_URL, { signal: controller.signal });
-    } catch (fetchErr: unknown) {
-      clearTimeout(timeoutId);
-      const msg =
-        fetchErr instanceof Error ? fetchErr.message : String(fetchErr);
-      const isTimeout =
-        msg.includes("abort") || msg.includes("AbortError");
+    for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+      attempts = attempt + 1;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
-      // Log fetch failure
-      await supabase.from("ingestion_log").insert({
-        source: "fmi",
-        status: "error",
-        error_message: isTimeout
-          ? `FMI fetch timed out after ${FETCH_TIMEOUT_MS}ms`
-          : `FMI fetch failed: ${msg}`,
-        details: { url: FMI_URL },
-      });
+      try {
+        const res = await fetch(FMI_URL, { signal: controller.signal });
+        clearTimeout(timeoutId);
 
-      return new Response(
-        JSON.stringify({
-          ok: false,
-          error: isTimeout ? "fmi_timeout" : "fmi_fetch_error",
-        }),
-        {
-          status: 502,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        if (res.ok) {
+          fmiResponse = res;
+          break;
         }
-      );
+
+        // HTTP error — capture for logging, retry on 5xx
+        const body = await res.text().catch(() => "(unreadable)");
+        lastError = `FMI returned HTTP ${res.status}: ${body.slice(0, 200)}`;
+
+        if (res.status < 500) {
+          // Client error (4xx) — no point retrying
+          break;
+        }
+      } catch (fetchErr: unknown) {
+        clearTimeout(timeoutId);
+        const msg = fetchErr instanceof Error ? fetchErr.message : String(fetchErr);
+        const isTimeout = msg.includes("abort") || msg.includes("AbortError");
+        lastError = isTimeout
+          ? `FMI fetch timed out after ${FETCH_TIMEOUT_MS}ms`
+          : `FMI fetch failed: ${msg}`;
+      }
+
+      // Wait before next attempt (unless this was the last one)
+      if (attempt < MAX_ATTEMPTS - 1) {
+        await new Promise((r) => setTimeout(r, RETRY_DELAYS_MS[attempt]));
+      }
     }
 
-    clearTimeout(timeoutId);
-
-    if (!fmiResponse.ok) {
-      const body = await fmiResponse.text().catch(() => "(unreadable)");
-
+    if (!fmiResponse) {
       await supabase.from("ingestion_log").insert({
         source: "fmi",
         status: "error",
-        error_message: `FMI returned HTTP ${fmiResponse.status}`,
-        details: { url: FMI_URL, httpStatus: fmiResponse.status, body: body.slice(0, 500) },
+        error_message: lastError ?? "Unknown fetch error",
+        details: { url: FMI_URL, attempts },
       });
 
       return new Response(
-        JSON.stringify({
-          ok: false,
-          error: `fmi_http_${fmiResponse.status}`,
-        }),
+        JSON.stringify({ ok: false, error: "fmi_fetch_failed", attempts }),
         {
           status: 502,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -353,6 +357,7 @@ Deno.serve(async (req: Request) => {
           latestInResponse: allObservations.length > 0
             ? allObservations[allObservations.length - 1].observedAt.toISOString()
             : null,
+          attempts,
         },
       });
 
@@ -430,6 +435,7 @@ Deno.serve(async (req: Request) => {
         recentCount: recentObservations.length,
         latestObservation: recentObservations[recentObservations.length - 1]
           .observedAt.toISOString(),
+        attempts,
       },
     });
 

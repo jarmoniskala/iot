@@ -33,7 +33,7 @@ export function SeverityBadge({ severity }: SeverityBadgeProps) {
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ${style.bg} ${style.text}`}
+      className={`inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[0.833rem] font-medium ${style.bg} ${style.text}`}
     >
       <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
       {style.label}

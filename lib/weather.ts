@@ -102,7 +102,7 @@ export function weatherConditionFromCloudCover(
  * Format: "2.1 mm -- Light rain"
  */
 export function precipitationLabel(mm: number | null): string {
-  if (mm === null || mm === 0) return 'None'
+  if (mm === null || mm === 0) return 'No precipitation'
   if (mm < 0.5) return `${mm.toFixed(1)} mm (Trace)`
   if (mm < 2.5) return `${mm.toFixed(1)} mm (Light rain)`
   if (mm < 7.5) return `${mm.toFixed(1)} mm (Moderate rain)`

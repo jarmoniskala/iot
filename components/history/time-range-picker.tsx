@@ -74,12 +74,12 @@ export function TimeRangePicker({
                   variant={timeRange === 'custom' ? 'default' : 'ghost'}
                   size="sm"
                   className={cn(
-                    'h-8 rounded-full text-xs',
+                    'h-8 text-xs',
                     timeRange === 'custom' && 'shadow-sm'
                   )}
                   onClick={() => handlePresetClick('custom')}
                 >
-                  <CalendarIcon className="mr-1.5 h-3 w-3" />
+                  <CalendarIcon className="mr-1.5 h-3 w-3" strokeWidth={1.5} />
                   {timeRange === 'custom' && customRange
                     ? `${format(new Date(customRange.from), 'MMM d')} - ${format(new Date(customRange.to), 'MMM d')}`
                     : 'Custom'}
@@ -113,7 +113,7 @@ export function TimeRangePicker({
             variant={timeRange === preset.value ? 'default' : 'ghost'}
             size="sm"
             className={cn(
-              'h-8 rounded-full text-xs',
+              'h-8 text-xs',
               timeRange === preset.value && 'shadow-sm'
             )}
             onClick={() => handlePresetClick(preset.value)}

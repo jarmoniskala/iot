@@ -202,7 +202,7 @@ export function TrendChart({
           className="absolute top-2 right-2 z-10 h-7 text-xs gap-1"
           onClick={resetZoom}
         >
-          <RotateCcw className="h-3 w-3" />
+          <RotateCcw className="h-3 w-3" strokeWidth={1.5} />
           Reset zoom
         </Button>
       )}
@@ -224,25 +224,25 @@ export function TrendChart({
               domain={[domain.left, domain.right]}
               scale="time"
               tickFormatter={tickFormatter}
-              tick={{ fontSize: 11, fill: '#9ca3af' }}
-              stroke="#4b5563"
-              strokeOpacity={0.3}
+              tick={{ fontSize: 11, fill: '#657080' }}
+              stroke="#475569"
+              strokeOpacity={0.2}
               tickLine={false}
               axisLine={false}
             />
             <YAxis
               domain={yDomain}
-              tick={{ fontSize: 11, fill: '#9ca3af' }}
-              stroke="#4b5563"
-              strokeOpacity={0.3}
+              tick={{ fontSize: 11, fill: '#657080' }}
+              stroke="#475569"
+              strokeOpacity={0.2}
               tickLine={false}
               axisLine={false}
-              width={45}
+              width={40}
               label={{
                 value: METRIC_UNIT[metric],
                 position: 'insideTopLeft',
                 offset: -5,
-                style: { fontSize: 11, fill: '#9ca3af' },
+                style: { fontSize: 11, fill: '#657080' },
               }}
             />
 
@@ -250,7 +250,7 @@ export function TrendChart({
             {showZeroLine && (
               <ReferenceLine
                 y={0}
-                stroke="#6b7280"
+                stroke="#475569"
                 strokeWidth={1}
                 strokeDasharray="6 3"
               />
@@ -266,9 +266,9 @@ export function TrendChart({
                 />
               }
               cursor={{
-                stroke: '#9ca3af',
-                strokeOpacity: 0.3,
-                strokeDasharray: '4 4',
+                stroke: '#64748B',
+                strokeOpacity: 0.2,
+                strokeDasharray: '3 3',
               }}
             />
 
@@ -281,9 +281,9 @@ export function TrendChart({
                   type="monotone"
                   dataKey={mac}
                   stroke={color}
-                  strokeWidth={2}
+                  strokeWidth={1.5}
                   dot={false}
-                  activeDot={{ r: 4, strokeWidth: 0, fill: color }}
+                  activeDot={{ r: 3, strokeWidth: 0, fill: color }}
                   isAnimationActive={false}
                   connectNulls={true}
                 />

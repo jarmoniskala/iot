@@ -1,12 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible'
 import {
   Sun,
   CloudSun,
@@ -23,10 +16,8 @@ import {
   Haze,
   Droplets,
   Gauge,
-  Eye,
   Navigation,
   AlertTriangle,
-  ChevronDown,
   Thermometer,
 } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
@@ -35,49 +26,32 @@ import {
   weatherConditionFromCloudCover,
   precipitationLabel,
   windDirectionToCompass,
-  cloudCoverLabel,
 } from '@/lib/weather'
 import { isWeatherStale, useNow } from '@/lib/staleness'
 import type { WeatherObservation } from '@/lib/types'
 
-// Map icon string names to actual lucide-react components
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  Sun,
-  CloudSun,
-  Cloud,
-  CloudRain,
-  CloudDrizzle,
-  CloudLightning,
-  CloudFog,
-  Snowflake,
-  Wind,
-  Zap,
-  HelpCircle,
-  CloudHail,
-  Haze,
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties; strokeWidth?: number }>> = {
+  Sun, CloudSun, Cloud, CloudRain, CloudDrizzle, CloudLightning,
+  CloudFog, Snowflake, Wind, Zap, HelpCircle, CloudHail, Haze,
 }
 
-interface WeatherPanelProps {
+interface WeatherHeroProps {
   weather: WeatherObservation | null
 }
 
-export function WeatherPanel({ weather }: WeatherPanelProps) {
+export function WeatherHero({ weather }: WeatherHeroProps) {
   const now = useNow()
-  const [mobileOpen, setMobileOpen] = useState(false)
 
   if (!weather) {
     return (
-      <Card className="w-full lg:w-72 xl:w-80 shrink-0 bg-sky-500/5 dark:bg-sky-500/10 border-sky-500/20">
-        <CardContent className="p-4 text-center text-sm text-muted-foreground">
-          No weather data yet. Waiting for FMI observation...
-        </CardContent>
-      </Card>
+      <section className="bg-background px-5 py-10 text-center">
+        <p className="text-muted-foreground text-sm">Waiting for weather data...</p>
+      </section>
     )
   }
 
   const stale = isWeatherStale(weather.observed_at, now)
 
-  // Derive weather condition
   const condition =
     weather.weather_code !== null && !isNaN(weather.weather_code)
       ? weatherConditionFromCode(weather.weather_code)
@@ -87,180 +61,129 @@ export function WeatherPanel({ weather }: WeatherPanelProps) {
   const compassDir = windDirectionToCompass(weather.wind_direction)
   const windRotation = weather.wind_direction !== null ? weather.wind_direction : 0
 
-  const detailRows = [
-    {
-      icon: Droplets,
-      label: 'Humidity',
-      value: weather.humidity !== null ? `${weather.humidity.toFixed(0)}%` : '--',
-    },
-    {
-      icon: Wind,
-      label: 'Wind',
-      value:
-        weather.wind_speed !== null
-          ? `${weather.wind_speed.toFixed(1)} m/s`
-          : '--',
-      extra:
-        weather.wind_gust !== null
-          ? `(Gust ${weather.wind_gust.toFixed(1)})`
-          : undefined,
-    },
-    {
-      icon: Navigation,
-      label: 'Direction',
-      value: compassDir,
-      rotation: windRotation,
-    },
-    {
-      icon: Gauge,
-      label: 'Pressure',
-      value: weather.pressure !== null ? `${weather.pressure.toFixed(0)} hPa` : '--',
-    },
-    {
-      icon: CloudRain,
-      label: 'Precipitation',
-      ...(() => {
-        const full = precipitationLabel(weather.precipitation_1h)
-        const match = full.match(/^(.+?)\s*(\(.+\))$/)
-        return match ? { value: match[1], extra: match[2] } : { value: full }
-      })(),
-    },
-    {
-      icon: Cloud,
-      label: 'Cloud cover',
-      ...(() => {
-        const full = cloudCoverLabel(weather.cloud_cover)
-        const match = full.match(/^(.+?)\s*(\(.+\))$/)
-        return match ? { value: match[1], extra: match[2] } : { value: full }
-      })(),
-    },
-    {
-      icon: Eye,
-      label: 'Visibility',
-      value:
-        weather.visibility !== null
-          ? weather.visibility >= 1000
-            ? `${(weather.visibility / 1000).toFixed(0)} km`
-            : `${weather.visibility.toFixed(0)} m`
-          : '--',
-    },
-    {
-      icon: Thermometer,
-      label: 'Dew point',
-      value: weather.dew_point !== null ? `${weather.dew_point.toFixed(1)}°C` : '--',
-    },
-  ]
+  const precipFull = precipitationLabel(weather.precipitation_1h)
+  const precipMatch = precipFull.match(/^(.+?)\s*(\(.+\))$/)
+  const precipValue = precipMatch ? precipMatch[1] : precipFull
 
-  // Desktop layout (full panel)
-  const fullContent = (
-    <div className={`space-y-4 ${stale ? 'opacity-50' : ''}`}>
-      {/* Condition + temperature header */}
-      <div className="text-center space-y-1">
-        <ConditionIcon className="h-8 w-8 mx-auto text-muted-foreground" />
-        <p className="text-sm font-medium text-muted-foreground">{condition.label}</p>
-        <div>
-          <span className="text-3xl font-light tabular-nums">
-            {weather.temperature !== null ? weather.temperature.toFixed(1) : '--'}
-          </span>
-          <span className="text-lg text-muted-foreground ml-0.5">°C</span>
+  return (
+    <section className="bg-background">
+      <div className="max-w-7xl mx-auto px-5 pt-6 pb-5">
+        {/* Section heading — never dims */}
+        <div className="flex items-end justify-between mb-5">
+          <div>
+            <h2 className="text-[1.728rem] font-semibold leading-tight tracking-tight text-foreground">Weather</h2>
+            <p className="text-[1.44rem] font-light text-muted-foreground mt-1">Data provided by FMI</p>
+          </div>
+          <div className="flex items-center gap-2 mb-0.5">
+            {stale && <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" strokeWidth={1.5} />}
+            <span className="text-[0.833rem] text-muted-foreground/60">
+              {stale ? 'Last updated ' : 'Updated '}
+              {formatDistanceToNow(new Date(weather.observed_at), { addSuffix: true })}
+            </span>
+          </div>
         </div>
-      </div>
 
-      {/* Detail rows */}
-      <div className="space-y-2.5">
-        {detailRows.map((row) => (
-          <div
-            key={row.label}
-            className="flex items-center justify-between text-sm"
-          >
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <row.icon
-                className="h-3.5 w-3.5 shrink-0"
-                style={
-                  row.rotation !== undefined
-                    ? { transform: `rotate(${row.rotation}deg)` }
-                    : undefined
-                }
-              />
-              <span>{row.label}</span>
+        {/* Primary metric cards (5 columns on lg) */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+          {/* Weather condition card */}
+          <div className="bg-card border border-border rounded-lg p-5">
+            <div className="flex items-center gap-2">
+              <ConditionIcon className="h-6 w-6 text-foreground dark:text-white shrink-0" strokeWidth={1.2} />
+              <span className="text-[1.2rem] font-medium text-foreground dark:text-white">Condition</span>
             </div>
-            <div className="text-right tabular-nums">
-              <span>{row.value}</span>
-              {row.extra && (
-                <span className="text-xs text-muted-foreground ml-1">
-                  {row.extra}
+            <div className={`mt-5 ${stale ? 'opacity-50' : ''}`}>
+              <span className="text-[1.728rem] font-light leading-tight text-foreground dark:text-white">
+                {condition.label}
+              </span>
+            </div>
+            <p className={`mt-3 text-muted-foreground/60 dark:text-white/40 text-[0.833rem] ${stale ? 'opacity-50' : ''}`}>
+              {precipValue}
+            </p>
+          </div>
+
+          {/* Temperature card */}
+          <div className="bg-card border border-border rounded-lg p-5">
+            <div className="flex items-center gap-2">
+              <Thermometer className="h-6 w-6 text-foreground dark:text-white shrink-0" strokeWidth={1.2} />
+              <span className="text-[1.2rem] font-medium text-foreground dark:text-white">Temp</span>
+            </div>
+            <div className={`mt-5 flex items-baseline gap-0.5 ${stale ? 'opacity-50' : ''}`}>
+              <span className="text-[1.728rem] font-light leading-none tabular-nums text-foreground dark:text-white">
+                {weather.temperature !== null ? weather.temperature.toFixed(1) : '--'}
+              </span>
+              <span className="text-sm text-muted-foreground/70 dark:text-white/60 font-light">°C</span>
+            </div>
+          </div>
+
+          {/* Wind card */}
+          <div className="bg-card border border-border rounded-lg p-5">
+            <div className="flex items-center gap-2">
+              <Wind className="h-6 w-6 text-foreground dark:text-white shrink-0" strokeWidth={1.2} />
+              <span className="text-[1.2rem] font-medium text-foreground dark:text-white">Wind</span>
+            </div>
+            <div className={`mt-5 flex items-baseline gap-0.5 ${stale ? 'opacity-50' : ''}`}>
+              <span className="text-[1.728rem] font-light leading-none tabular-nums text-foreground dark:text-white">
+                {weather.wind_speed !== null ? weather.wind_speed.toFixed(1) : '--'}
+              </span>
+              <span className="text-sm text-muted-foreground/70 dark:text-white/60 font-light">m/s</span>
+            </div>
+            <div className={`mt-3 flex items-center gap-1.5 text-muted-foreground/70 dark:text-white/50 text-[0.833rem] ${stale ? 'opacity-50' : ''}`}>
+              <Navigation
+                className="h-3 w-3 shrink-0"
+                strokeWidth={1.5}
+                style={{ transform: `rotate(${windRotation}deg)` }}
+              />
+              <span>{compassDir}</span>
+              {weather.wind_gust !== null && (
+                <span className="text-muted-foreground/50 dark:text-white/40">({weather.wind_gust.toFixed(1)})</span>
+              )}
+            </div>
+          </div>
+
+          {/* Humidity card */}
+          <div className="bg-card border border-border rounded-lg p-5">
+            <div className="flex items-center gap-2">
+              <Droplets className="h-6 w-6 text-foreground dark:text-white shrink-0" strokeWidth={1.2} />
+              <span className="text-[1.2rem] font-medium text-foreground dark:text-white">Humidity</span>
+            </div>
+            <div className={`mt-5 flex items-baseline gap-0.5 ${stale ? 'opacity-50' : ''}`}>
+              <span className="text-[1.728rem] font-light leading-none tabular-nums text-foreground dark:text-white">
+                {weather.humidity !== null ? weather.humidity.toFixed(0) : '--'}
+              </span>
+              <span className="text-sm text-muted-foreground/70 dark:text-white/60 font-light">%</span>
+            </div>
+            {weather.dew_point !== null && (
+              <p className={`mt-3 text-muted-foreground/60 dark:text-white/40 text-[0.833rem] ${stale ? 'opacity-50' : ''}`}>
+                Dew pt {weather.dew_point.toFixed(1)}°
+              </p>
+            )}
+          </div>
+
+          {/* Pressure card */}
+          <div className="bg-card border border-border rounded-lg p-5">
+            <div className="flex items-center gap-2">
+              <Gauge className="h-6 w-6 text-foreground dark:text-white shrink-0" strokeWidth={1.2} />
+              <span className="text-[1.2rem] font-medium text-foreground dark:text-white">Pressure</span>
+            </div>
+            <div className={`mt-5 flex items-baseline gap-0.5 ${stale ? 'opacity-50' : ''}`}>
+              <span className="text-[1.728rem] font-light leading-none tabular-nums text-foreground dark:text-white">
+                {weather.pressure !== null ? weather.pressure.toFixed(0) : '--'}
+              </span>
+              <span className="text-sm text-muted-foreground/70 dark:text-white/60 font-light">hPa</span>
+            </div>
+            <div className={`mt-3 flex items-center gap-1.5 text-muted-foreground/60 dark:text-white/40 text-[0.833rem] ${stale ? 'opacity-50' : ''}`}>
+              {weather.cloud_cover !== null && <span>{weather.cloud_cover}% cloud</span>}
+              {weather.visibility !== null && (
+                <span>
+                  {weather.visibility >= 1000
+                    ? `${(weather.visibility / 1000).toFixed(0)} km vis`
+                    : `${weather.visibility.toFixed(0)} m vis`}
                 </span>
               )}
             </div>
           </div>
-        ))}
-      </div>
-
-      {/* Timestamp + staleness */}
-      <div className="text-center pt-1">
-        <div className="flex items-center justify-center gap-1">
-          {stale && <AlertTriangle className="h-3 w-3 text-amber-500" />}
-          <span className="text-xs text-muted-foreground">
-            {stale ? 'Last updated ' : 'Updated '}
-            {formatDistanceToNow(new Date(weather.observed_at), {
-              addSuffix: true,
-            })}
-          </span>
         </div>
       </div>
-    </div>
-  )
-
-  return (
-    <>
-      {/* Desktop: always-visible side panel */}
-      <Card className="hidden lg:block w-72 xl:w-80 shrink-0 bg-sky-500/5 dark:bg-sky-500/10 border-sky-500/20">
-        <CardContent className="p-4 relative">
-          {fullContent}
-          <span className="absolute bottom-3 right-3 text-[10px] font-semibold tracking-wider text-sky-400/30 dark:text-sky-300/20">FMI</span>
-        </CardContent>
-      </Card>
-
-      {/* Mobile: collapsible panel */}
-      <Collapsible open={mobileOpen} onOpenChange={setMobileOpen} className="lg:hidden">
-        <Card className="bg-sky-500/5 dark:bg-sky-500/10 border-sky-500/20">
-          <CollapsibleTrigger className="w-full">
-            <CardContent className="p-4">
-              <div className={`flex items-center justify-between ${stale ? 'opacity-50' : ''}`}>
-                <div className="flex items-center gap-3">
-                  <ConditionIcon className="h-5 w-5 text-muted-foreground" />
-                  <span className="text-sm font-medium text-muted-foreground">
-                    Outdoors
-                  </span>
-                  <span className="text-lg font-light tabular-nums">
-                    {weather.temperature !== null
-                      ? `${weather.temperature.toFixed(1)}°C`
-                      : '--'}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {condition.label}
-                  </span>
-                </div>
-                <ChevronDown
-                  className={`h-4 w-4 text-muted-foreground transition-transform ${
-                    mobileOpen ? 'rotate-180' : ''
-                  }`}
-                />
-              </div>
-            </CardContent>
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            <CardContent className="px-4 pb-4 pt-0 relative">
-              {fullContent}
-              <img
-                src="/fmi-logo.svg"
-                alt="FMI"
-                className="absolute bottom-3 right-3 h-4 opacity-30"
-              />
-            </CardContent>
-          </CollapsibleContent>
-        </Card>
-      </Collapsible>
-    </>
+    </section>
   )
 }

@@ -9,10 +9,10 @@ interface HealthClientProps {
 
 export function HealthClient({ initialHealth }: HealthClientProps) {
   return (
-    <div className="max-w-7xl mx-auto px-6 py-6 space-y-4">
+    <div className="max-w-7xl mx-auto px-5 py-8 space-y-5">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">System Health</h1>
-        <p className="text-sm text-muted-foreground">
+        <h1 className="text-[1.728rem] font-semibold leading-tight tracking-tight">System Health</h1>
+        <p className="text-[1.44rem] font-light text-muted-foreground mt-1">
           Battery, signal, uptime, and connectivity status for all sensors.
         </p>
       </div>

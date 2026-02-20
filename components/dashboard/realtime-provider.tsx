@@ -109,5 +109,21 @@ export function RealtimeProvider({
     }
   }, [handleSensorInsert])
 
+  // Re-enrich readings when configs change (e.g. display_name edit)
+  useEffect(() => {
+    setReadings((prev) => {
+      const next = new Map(prev)
+      let changed = false
+      for (const [mac, reading] of next) {
+        const config = configs.find(c => c.mac_address === mac && c.unassigned_at === null)
+        if (config && (reading.display_name !== (config.display_name ?? null) || reading.room_name !== (config.room_name ?? null))) {
+          next.set(mac, { ...reading, display_name: config.display_name ?? null, room_name: config.room_name ?? null })
+          changed = true
+        }
+      }
+      return changed ? next : prev
+    })
+  }, [configs])
+
   return <>{children({ readings, weather, sensorConfig: configs })}</>
 }

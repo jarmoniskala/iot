@@ -74,14 +74,14 @@ export function SummaryStats({
                   className="h-2.5 w-2.5 rounded-full shrink-0"
                   style={{ backgroundColor: color }}
                 />
-                <span className="text-sm font-medium">
+                <span className="text-xs font-medium dark:text-white">
                   {row.display_name ?? row.mac_address}
                 </span>
               </div>
-              <div className="flex items-center gap-3 text-xs text-muted-foreground">
+              <div className="flex items-center gap-2.5 text-[0.833rem] text-muted-foreground">
                 <span>
                   Min{' '}
-                  <span className="font-medium text-foreground">
+                  <span className="font-medium text-foreground dark:text-white">
                     {formatVal(minVal)}
                     {config.unit}
                   </span>
@@ -89,7 +89,7 @@ export function SummaryStats({
                 <span className="text-border">|</span>
                 <span>
                   Max{' '}
-                  <span className="font-medium text-foreground">
+                  <span className="font-medium text-foreground dark:text-white">
                     {formatVal(maxVal)}
                     {config.unit}
                   </span>
@@ -97,7 +97,7 @@ export function SummaryStats({
                 <span className="text-border">|</span>
                 <span>
                   Avg{' '}
-                  <span className="font-medium text-foreground">
+                  <span className="font-medium text-foreground dark:text-white">
                     {formatVal(avgVal)}
                     {config.unit}
                   </span>

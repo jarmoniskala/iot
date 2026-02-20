@@ -1,18 +1,8 @@
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { GeistSans } from "geist/font/sans"
 import { Providers } from "./providers"
 import { Navigation } from "@/components/navigation"
 import "./globals.css"
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-})
 
 export const metadata: Metadata = {
   title: "Home IoT Monitor",
@@ -27,11 +17,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-[family-name:var(--font-geist-sans)] antialiased`}
+        className={`${GeistSans.variable} font-[family-name:var(--font-geist-sans)] antialiased`}
       >
         <Providers>
           <Navigation />
-          {children}
+          <div className="pl-[264px]">
+            {children}
+          </div>
         </Providers>
       </body>
     </html>
