@@ -13,7 +13,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **PIPE-02**: Edge function validates incoming sensor data (known MAC, realistic ranges, deduplication)
 - [ ] **PIPE-03**: FMI API polled on schedule via pg_cron + pg_net (every 10 min) and stored in database
 - [ ] **PIPE-04**: FMI XML/GML response parsed correctly for Helsinki-Vantaa airport station (FMISID 100968)
-- [ ] **PIPE-05**: Database storage usage monitored and displayed on dashboard
+- [x] **PIPE-05**: Database storage usage monitored and displayed on dashboard
 - [ ] **PIPE-06**: Supabase project kept alive (prevent 7-day inactivity pause)
 
 ### Live Dashboard
@@ -86,7 +86,7 @@ Deferred to future release. Tracked but not in current roadmap.
 | PIPE-02 | Phase 1 | Pending |
 | PIPE-03 | Phase 1 | Pending |
 | PIPE-04 | Phase 1 | Pending |
-| PIPE-05 | Phase 4 | Pending |
+| PIPE-05 | Phase 4 | Complete |
 | PIPE-06 | Phase 1 | Pending |
 | LIVE-01 | Phase 2 | Pending |
 | LIVE-02 | Phase 2 | Pending |

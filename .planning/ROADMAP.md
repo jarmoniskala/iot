@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Data Pipeline** - Supabase schema, Ruuvi ingestion edge function, FMI weather polling, and infrastructure reliability (completed 2026-02-17)
 - [ ] **Phase 2: Live Dashboard** - Real-time room readings, outdoor weather, computed comfort metrics, and mobile-responsive UI
 - [ ] **Phase 3: History and Health** - Historical trend charts with time range selection, system health diagnostics, and data gap visualization
-- [ ] **Phase 4: Storage Dashboard Widget** - Front-end display of database storage usage on dashboard (gap closure for PIPE-05)
+- [x] **Phase 4: Storage Dashboard Widget** - Front-end display of database storage usage on dashboard (gap closure for PIPE-05) (completed 2026-02-20)
 
 ## Phase Details
 
@@ -76,7 +76,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 04-01-PLAN.md -- SECURITY DEFINER migration, storage query layer, and dashboard storage widget with progress bar and per-table breakdown
+- [x] 04-01-PLAN.md -- SECURITY DEFINER migration, storage query layer, and dashboard storage widget with progress bar and per-table breakdown
 
 ## Progress
 
@@ -88,4 +88,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 1. Data Pipeline | 0/2 | Complete    | 2026-02-17 |
 | 2. Live Dashboard | 0/2 | Not started | - |
 | 3. History and Health | 0/2 | Not started | - |
-| 4. Storage Dashboard Widget | 0/1 | Not started | - |
+| 4. Storage Dashboard Widget | 1/1 | Complete    | 2026-02-20 |

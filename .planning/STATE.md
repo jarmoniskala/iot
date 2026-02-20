@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-17)
 
 **Core value:** See current and historical temperature, humidity, and pressure across every room at a glance, with outdoor weather context from FMI.
-**Current focus:** Phase 3: History and Health
+**Current focus:** Phase 4: Storage Dashboard Widget
 
 ## Current Position
 
-Phase: 3 of 3 (History and Health)
-Plan: 2 of 2 in current phase
-Status: Phase 03 Complete -- All phases complete
-Last activity: 2026-02-18 -- Completed 03-02 (Sensor Health Dashboard)
+Phase: 4 of 4 (Storage Dashboard Widget)
+Plan: 1 of 1 in current phase
+Status: Phase 04 Complete -- All phases complete
+Last activity: 2026-02-20 -- Completed 04-01 (Storage Dashboard Widget)
 
 Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 5min
-- Total execution time: 0.49 hours
+- Total plans completed: 7
+- Average duration: 4.6min
+- Total execution time: 0.53 hours
 
 **By Phase:**
 
@@ -30,9 +30,10 @@ Progress: [██████████] 100%
 | 01-data-pipeline | 2 | 6min | 3min |
 | 02-live-dashboard | 2 | 12min | 6min |
 | 03-history-and-health | 2 | 11min | 5.5min |
+| 04-storage-dashboard-widget | 1 | 2min | 2min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (8min), 02-02 (4min), 03-01 (7min), 03-02 (4min)
+- Last 5 plans: 02-02 (4min), 03-01 (7min), 03-02 (4min), 04-01 (2min)
 - Trend: stable
 
 *Updated after each plan completion*
@@ -86,6 +87,9 @@ Recent decisions affecting current work:
 - [03-02]: Stale data warning uses animate-pulse; low battery warning is static
 - [03-02]: Expandable row trend data fetched lazily with useRef guard to prevent re-fetches
 - [03-02]: Custom sort prioritizes severity (critical > warning > healthy) then alphabetical
+- [04-01]: SECURITY DEFINER SET search_path = public on both storage RPCs so anon role can call pg_database_size and pg_stat_user_tables
+- [04-01]: Partition tables filtered via regex /_\d{4}_\d{2}$|_default$/ to avoid cluttering breakdown
+- [04-01]: Checked-at timestamp derived from server render time (RPC returns live data)
 
 ### Pending Todos
 
@@ -99,6 +103,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-18
-Stopped at: Completed 03-02-PLAN.md (Sensor Health Dashboard) -- All phases complete
-Resume file: .planning/phases/03-history-and-health/03-02-SUMMARY.md
+Last session: 2026-02-20
+Stopped at: Completed 04-01-PLAN.md (Storage Dashboard Widget) -- All phases complete
+Resume file: .planning/phases/04-storage-dashboard-widget/04-01-SUMMARY.md
