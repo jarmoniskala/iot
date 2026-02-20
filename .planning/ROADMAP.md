@@ -15,6 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Data Pipeline** - Supabase schema, Ruuvi ingestion edge function, FMI weather polling, and infrastructure reliability (completed 2026-02-17)
 - [ ] **Phase 2: Live Dashboard** - Real-time room readings, outdoor weather, computed comfort metrics, and mobile-responsive UI
 - [ ] **Phase 3: History and Health** - Historical trend charts with time range selection, system health diagnostics, and data gap visualization
+- [ ] **Phase 4: Storage Dashboard Widget** - Front-end display of database storage usage on dashboard (gap closure for PIPE-05)
 
 ## Phase Details
 
@@ -64,13 +65,27 @@ Plans:
 - [ ] 03-01-PLAN.md -- Database functions (aggregation, gap detection, summary stats), dependencies (recharts, @tanstack/react-table), navigation header, shared hooks, and history page with trend charts, time range picker, room overlay, zoom/pan, gap visualization, and summary stats
 - [ ] 03-02-PLAN.md -- System health page with sortable/expandable sensor table, severity indicators, battery/RSSI trend mini-charts, and dashboard warning icons linking to health page
 
+### Phase 4: Storage Dashboard Widget
+**Goal**: Database storage usage is visible on the dashboard so the user can monitor Supabase free-tier consumption at a glance
+**Depends on**: Phase 2
+**Requirements**: PIPE-05
+**Gap Closure:** Closes PIPE-05 gap from v1.0 audit — infrastructure (PostgreSQL functions + cron job) exists in Phase 1 but front-end display was never built
+**Success Criteria** (what must be TRUE):
+  1. Dashboard displays current database size (MB) and per-table breakdown
+  2. Data comes from existing `get_database_size_mb()` / `get_table_sizes()` functions or `ingestion_log` storage entries
+**Plans:** 0 plans
+
+Plans:
+- (none yet — run `/gsd:plan-phase 4`)
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Data Pipeline | 0/2 | Complete    | 2026-02-17 |
 | 2. Live Dashboard | 0/2 | Not started | - |
 | 3. History and Health | 0/2 | Not started | - |
+| 4. Storage Dashboard Widget | 0/0 | Not started | - |

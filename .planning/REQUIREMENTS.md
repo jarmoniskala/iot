@@ -86,7 +86,7 @@ Deferred to future release. Tracked but not in current roadmap.
 | PIPE-02 | Phase 1 | Pending |
 | PIPE-03 | Phase 1 | Pending |
 | PIPE-04 | Phase 1 | Pending |
-| PIPE-05 | Phase 1 | Pending |
+| PIPE-05 | Phase 4 | Pending |
 | PIPE-06 | Phase 1 | Pending |
 | LIVE-01 | Phase 2 | Pending |
 | LIVE-02 | Phase 2 | Pending |
@@ -98,7 +98,7 @@ Deferred to future release. Tracked but not in current roadmap.
 | HIST-01 | Phase 3 | Pending |
 | HIST-02 | Phase 3 | Pending |
 | HIST-03 | Phase 3 | Pending |
-| HIST-04 | Phase 3 | Pending |
+| HIST-04 | Phase 3 | Deferred (v2 — RELY-01 prerequisite) |
 | HIST-05 | Phase 3 | Pending |
 | HLTH-01 | Phase 3 | Pending |
 | HLTH-02 | Phase 3 | Pending |
@@ -110,7 +110,8 @@ Deferred to future release. Tracked but not in current roadmap.
 
 **Coverage:**
 - v1 requirements: 25 total
-- Mapped to phases: 25
+- Mapped to phases: 25 (PIPE-05 moved to Phase 4)
+- Deferred to v2: 1 (HIST-04 — requires RELY-01)
 - Unmapped: 0
 
 ---
