@@ -145,6 +145,15 @@ export type TooltipMode = 'shared' | 'single'
 /** Metric type for history chart. */
 export type Metric = 'temperature' | 'humidity' | 'pressure'
 
+// ── Storage types ─────────────────────────────────────────────────
+
+/** Row from get_table_sizes RPC. */
+export interface TableSize {
+  table_name: string
+  size_mb: number
+  row_estimate: number
+}
+
 // ── Health types ──────────────────────────────────────────────────
 
 /** Row from get_sensor_health RPC. */
