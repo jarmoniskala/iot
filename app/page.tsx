@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { DashboardClient } from '@/components/dashboard/dashboard-client'
+import { fetchDatabaseSize, fetchTableSizes } from '@/lib/queries/storage'
 import type { LatestSensorReading, WeatherObservation, SensorConfig } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
@@ -19,9 +20,19 @@ export default async function Home() {
     .is('unassigned_at', null)
 
   // Fetch latest weather observation from the view
-  const { data: weatherRows } = await supabase
+  const { data: weatherRows, error: weatherError } = await supabase
     .from('latest_weather')
     .select('*')
+
+  if (weatherError) {
+    console.error('Failed to fetch weather:', weatherError.message)
+  }
+
+  // Fetch storage metrics via RPC wrappers
+  const [dbSizeMb, tableSizes] = await Promise.all([
+    fetchDatabaseSize(supabase),
+    fetchTableSizes(supabase),
+  ])
 
   const initialReadings = (sensorReadings ?? []) as LatestSensorReading[]
   const configs = (sensorConfig ?? []) as SensorConfig[]
@@ -34,6 +45,9 @@ export default async function Home() {
       initialReadings={initialReadings}
       initialWeather={initialWeather}
       sensorConfig={configs}
+      storageSizeMb={dbSizeMb}
+      storageCheckedAt={new Date().toISOString()}
+      tableSizes={tableSizes}
     />
   )
 }

@@ -3,29 +3,38 @@
 import { useState, useCallback } from 'react'
 import { RealtimeProvider } from './realtime-provider'
 import { RoomGrid } from './room-grid'
-import { WeatherPanel } from './weather-panel'
+import { WeatherHero } from './weather-panel'
 import { SortControls } from './sort-controls'
 import { EditRoomDialog } from './edit-room-dialog'
+import { StorageWidget } from './storage-widget'
 import type {
   LatestSensorReading,
   WeatherObservation,
   SensorConfig,
   SortMode,
+  TableSize,
 } from '@/lib/types'
 
 interface DashboardClientProps {
   initialReadings: LatestSensorReading[]
   initialWeather: WeatherObservation | null
   sensorConfig: SensorConfig[]
+  storageSizeMb: number | null
+  storageCheckedAt: string | null
+  tableSizes: TableSize[]
 }
 
 export function DashboardClient({
   initialReadings,
   initialWeather,
   sensorConfig,
+  storageSizeMb,
+  storageCheckedAt,
+  tableSizes,
 }: DashboardClientProps) {
   const [sortMode, setSortMode] = useState<SortMode>('alphabetical')
   const [editingSensor, setEditingSensor] = useState<SensorConfig | null>(null)
+  const [configVersion, setConfigVersion] = useState(0)
 
   const handleEdit = useCallback((sensor: SensorConfig) => {
     setEditingSensor(sensor)
@@ -36,53 +45,63 @@ export function DashboardClient({
   }, [])
 
   return (
-    <div className="min-h-screen">
-      {/* Dashboard toolbar */}
-      <div className="flex items-center justify-end px-6 py-2 max-w-7xl mx-auto">
-        <SortControls sortMode={sortMode} onSortChange={setSortMode} />
-      </div>
+    <div className="min-h-screen flex flex-col">
+      <RealtimeProvider
+        initialReadings={initialReadings}
+        initialWeather={initialWeather}
+        sensorConfig={sensorConfig}
+      >
+        {({ readings, weather, sensorConfig: liveConfig }) => (
+          <>
+            {/* ─── Weather section ─── */}
+            <WeatherHero weather={weather} />
 
-      {/* Dashboard content */}
-      <main className="max-w-7xl mx-auto px-6 pb-6">
-        <RealtimeProvider
-          initialReadings={initialReadings}
-          initialWeather={initialWeather}
-          sensorConfig={sensorConfig}
-        >
-          {({ readings, weather, sensorConfig: liveConfig }) => (
-            <>
-              <div className="flex flex-col lg:flex-row gap-4 lg:gap-5">
-                {/* Room cards -- main area */}
-                <div className="flex-1 min-w-0">
-                  <RoomGrid
-                    readings={readings}
-                    sensorConfig={liveConfig}
-                    sortMode={sortMode}
-                    onEdit={handleEdit}
-                  />
+            {/* ─── Room cards section ─── */}
+            <div className="flex-1">
+              <div className="max-w-7xl mx-auto px-4 sm:px-5 pt-6 pb-8">
+                {/* Section heading */}
+                <div className="flex items-center justify-between mb-5">
+                  <div>
+                    <h2 className="text-[1.728rem] font-semibold leading-tight tracking-tight text-foreground">Rooms</h2>
+                    <p className="text-[1.44rem] font-light text-muted-foreground mt-1">Indoor sensor readings</p>
+                  </div>
+                  <SortControls sortMode={sortMode} onSortChange={setSortMode} />
                 </div>
 
-                {/* Weather panel -- side panel on desktop, stacked on mobile */}
-                <WeatherPanel weather={weather} />
-              </div>
-
-              {/* Edit room dialog */}
-              {editingSensor && (
-                <EditRoomDialog
-                  sensor={editingSensor}
-                  isOpen={!!editingSensor}
-                  onClose={handleCloseEdit}
-                  onSave={(updated) => {
-                    // The Realtime subscription will pick up the Supabase
-                    // display_name change. Icon changes are local-only.
-                    setEditingSensor(null)
-                  }}
+                <RoomGrid
+                  readings={readings}
+                  sensorConfig={liveConfig}
+                  sortMode={sortMode}
+                  onEdit={handleEdit}
+                  configVersion={configVersion}
                 />
-              )}
-            </>
-          )}
-        </RealtimeProvider>
-      </main>
+              </div>
+            </div>
+
+            {/* ─── Storage section ─── */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-5 pb-8">
+              <StorageWidget
+                sizeMb={storageSizeMb}
+                checkedAt={storageCheckedAt}
+                tableSizes={tableSizes}
+              />
+            </div>
+
+            {/* Edit room dialog */}
+            {editingSensor && (
+              <EditRoomDialog
+                sensor={editingSensor}
+                isOpen={!!editingSensor}
+                onClose={handleCloseEdit}
+                onSave={() => {
+                  setConfigVersion(v => v + 1)
+                  setEditingSensor(null)
+                }}
+              />
+            )}
+          </>
+        )}
+      </RealtimeProvider>
     </div>
   )
 }
